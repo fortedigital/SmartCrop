@@ -6,7 +6,20 @@
 <h1 @Html.EditAttributes(x => x.CurrentPage.PageName)>@Model.CurrentPage.PageName</h1>
 <p class="introduction" @Html.EditAttributes(x => x.CurrentPage.MetaDescription)>@Model.CurrentPage.MetaDescription</p>
 
-@Html.EdDisplayFor(m => m.CurrentPage.Image)
+@Html.ResizedPicture(Model.CurrentPage.Image, 300, 300, false)<br /><br />
+@Html.ResizedPicture(Model.CurrentPage.Image, 300, 600, false)<br /><br />
+@Html.ResizedPicture(Model.CurrentPage.Image, 600, 300, false)<br /><br />
+
+
+
+@Html.ResizedPicture(Model.CurrentPage.Image, 300, 300, true)<br /><br />
+@Html.ResizedPicture(Model.CurrentPage.Image, 300, 600, true)<br /><br />
+@Html.ResizedPicture(Model.CurrentPage.Image, 600, 300, true)<br /><br />
+
+
+
+
+@Html.DisplayFor(m => m.CurrentPage.Image)
 
 <div class="row">
     <div class="span8 clearfix" @Html.EditAttributes(x => x.CurrentPage.MainBody)>
