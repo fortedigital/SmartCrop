@@ -6,6 +6,8 @@ using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Shell;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 
 namespace AlloyDemoKit
 {
@@ -13,7 +15,9 @@ namespace AlloyDemoKit
     [InitializableModule]
     public class SmartCropModule : IInitializableModule
     {
-        public void Initialize(InitializationEngine context)
+	    const string ApiKey = "0aae81ed8f2f43fbb05547107a53decd";
+
+		public void Initialize(InitializationEngine context)
         {
             context.Locate.ContentEvents().PublishingContent += new EventHandler<ContentEventArgs>(this.HandlePublishingContent);
         }
@@ -28,9 +32,13 @@ namespace AlloyDemoKit
                 {
                     using (var stream = ReadBlob(imageFile))
                     {
-                        imageFile.AreaOfInterestHeight = 1;
-                        imageFile.AreaOfInterestHeight = 2;
-                    }
+	                    var rect = GetAreaOfInterest(stream);
+
+	                    imageFile.AreaOfInterestX = rect.X;
+	                    imageFile.AreaOfInterestY = rect.Y;
+	                    imageFile.AreaOfInterestWidth = rect.W;
+	                    imageFile.AreaOfInterestHeight = rect.H;
+					}
                 }
             }
 
@@ -48,8 +56,19 @@ namespace AlloyDemoKit
             }
         }
 
+        private static BoundingRect GetAreaOfInterest(Stream imageStream)
+        {
+	        var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(ApiKey))
+	        {
+		        Endpoint = "https://westcentralus.api.cognitive.microsoft.com"
+	        };
 
-        public void Uninitialize(InitializationEngine context)
+	        var result = client.GetAreaOfInterestInStreamWithHttpMessagesAsync(imageStream).Result;
+	        return result.Body.AreaOfInterest;
+        }
+
+
+		public void Uninitialize(InitializationEngine context)
         {
 
         }
