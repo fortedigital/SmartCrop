@@ -1,3 +1,6 @@
+using AlloyDemoKit.Models.Media;
+using EPiServer.Core;
+
 namespace AlloyDemoKit.Models.Pages
 {
     /// <summary>
@@ -9,6 +12,6 @@ namespace AlloyDemoKit.Models.Pages
     [SiteImageUrl(Global.StaticGraphicsFolderPath + "page-type-thumbnail-article.png")]
     public class ArticlePage : StandardPage
     {
-        
+        public virtual ContentReference Image { get; set; }
     }
 }
