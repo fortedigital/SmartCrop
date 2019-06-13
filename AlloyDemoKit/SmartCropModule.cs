@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using AlloyDemoKit.Models.Media;
 using EPiServer;
@@ -16,6 +18,7 @@ namespace AlloyDemoKit
     public class SmartCropModule : IInitializableModule
     {
 	    const string ApiKey = "0aae81ed8f2f43fbb05547107a53decd";
+	    private const int MaxSize = 1024;
 
 		public void Initialize(InitializationEngine context)
         {
@@ -27,24 +30,55 @@ namespace AlloyDemoKit
             if (e.Content is ImageFile)
             {
                 var imageFile = (ImageFile)e.Content;
+				
 
                 if (imageFile.SmartCropEnabled)
                 {
                     using (var stream = ReadBlob(imageFile))
                     {
-	                    var rect = GetAreaOfInterest(stream);
+	                    var originalImage = Image.FromStream(stream);
+	                  
+	                    var resizedImage = ResizeImage(originalImage, MaxSize);
 
-	                    imageFile.AreaOfInterestX = rect.X;
-	                    imageFile.AreaOfInterestY = rect.Y;
-	                    imageFile.AreaOfInterestWidth = rect.W;
-	                    imageFile.AreaOfInterestHeight = rect.H;
+						var boundingRect = GetAreaOfInterest(resizedImage);
+
+						double scaleX = 1.0 / (resizedImage.Width  / (double)originalImage.Width);
+						double scaleY = 1.0 / (resizedImage.Height / (double)originalImage.Height);
+
+						imageFile.AreaOfInterestX = (int)(boundingRect.X * scaleX);
+						imageFile.AreaOfInterestY = (int)(boundingRect.Y * scaleY);
+						imageFile.AreaOfInterestWidth = (int)(boundingRect.W * scaleX);
+						imageFile.AreaOfInterestHeight = (int)(boundingRect.H * scaleY);
 					}
                 }
             }
 
         }
 
-        private static MemoryStream ReadBlob(ImageFile content)
+        private static Image ResizeImage(Image originalImage, int maxSize)
+        {
+	        int w;
+	        int h;
+	        int desWidth = maxSize;
+	        int desHeight = maxSize;
+
+			if (originalImage.Height > originalImage.Width)
+	        {
+		        w = (originalImage.Width * desHeight) / originalImage.Height;
+		        h = desHeight;
+		    
+	        }
+	        else
+	        {
+		        w = desWidth;
+		        h = (originalImage.Height * desWidth) / originalImage.Width;
+		       
+	        }
+
+			return originalImage.GetThumbnailImage(w, h, null, IntPtr.Zero);
+        }
+
+		private static MemoryStream ReadBlob(ImageFile content)
         {
             using (var stream = content.BinaryData.OpenRead())
             {
@@ -56,15 +90,21 @@ namespace AlloyDemoKit
             }
         }
 
-        private static BoundingRect GetAreaOfInterest(Stream imageStream)
+        private static BoundingRect GetAreaOfInterest(Image image)
         {
-	        var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(ApiKey))
+	        using (MemoryStream imageStream = new MemoryStream())
 	        {
-		        Endpoint = "https://westcentralus.api.cognitive.microsoft.com"
-	        };
+				image.Save(imageStream, ImageFormat.Png);
+				imageStream.Seek(0L, SeekOrigin.Begin);
 
-	        var result = client.GetAreaOfInterestInStreamWithHttpMessagesAsync(imageStream).Result;
-	        return result.Body.AreaOfInterest;
+				var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(ApiKey))
+		        {
+			        Endpoint = "https://westcentralus.api.cognitive.microsoft.com"
+		        };
+
+		        var result = client.GetAreaOfInterestInStreamWithHttpMessagesAsync(imageStream).Result;
+		        return result.Body.AreaOfInterest;
+	        }
         }
 
 

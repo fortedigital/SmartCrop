@@ -63,7 +63,12 @@ namespace AlloyDemoKit
 
         private static string CalculateCropBounds(ImageFile imageFile, int? width, int? height)
         {
-            return "10,10,300,300";
+	        int x = imageFile.AreaOfInterestX;
+	        int y = imageFile.AreaOfInterestY;
+	        int w = imageFile.AreaOfInterestWidth;
+	        int h = imageFile.AreaOfInterestHeight;
+
+			return $"{x},{y},{w},{h}";
         }
 
         private static string ResolveImageUrl(ContentReference image)
