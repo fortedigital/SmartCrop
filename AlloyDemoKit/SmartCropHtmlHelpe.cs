@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
 using AlloyDemoKit.Models.Media;
@@ -24,35 +26,34 @@ namespace AlloyDemoKit
                 return MvcHtmlString.Empty;
             }
             string imageBaseUrl = ResolveImageUrl(image);
-            ImageFile imageFile;
-            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out imageFile);
-
-            string imageUrl;
+            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out ImageFile imageFile);
 
             var isCrop = width != null && height != null;
-            if (smartCrop==false || isCrop==false)
-            {
-                var parameters = new Dictionary<string, string>();
 
-                if (width != null)
-                {
-                    parameters.Add("width", width.ToString());
-                }
-                if (height != null)
-                {
-                    parameters.Add("height", height.ToString());
-                }
-                if (isCrop)
-                {
-                    parameters.Add("mode", "crop");
-                }
+            var parameters = new List<string>();
 
-                imageUrl = imageBaseUrl + "?" + string.Join("&", parameters.Select(x => x.Key + "=" + x.Value));
-            }
-            else
+            if (smartCrop && isCrop)
             {
-               imageUrl=imageBaseUrl+"?crop="+CalculateCropBounds(imageFile, width, height);
+                parameters.Add("crop=" + CalculateCropBounds(imageFile, width, height));
             }
+
+            if (width != null)
+            {
+                parameters.Add("width=" + width.ToString());
+            }
+            if (height != null)
+            {
+                parameters.Add("height=" + height.ToString());
+            }
+            if (isCrop)
+            {
+                parameters.Add("mode=crop");
+            }
+
+
+
+            var imageUrl = imageBaseUrl + "?" + string.Join("&", parameters);
+
 
             TagBuilder tagBuilder = new TagBuilder("img");
             tagBuilder.Attributes.Add("src", imageUrl);
@@ -63,12 +64,12 @@ namespace AlloyDemoKit
 
         private static string CalculateCropBounds(ImageFile imageFile, int? width, int? height)
         {
-	        int x = imageFile.AreaOfInterestX;
-	        int y = imageFile.AreaOfInterestY;
-	        int w = imageFile.AreaOfInterestWidth;
-	        int h = imageFile.AreaOfInterestHeight;
+            int x = imageFile.AreaOfInterestX;
+            int y = imageFile.AreaOfInterestY;
+            int w = imageFile.AreaOfInterestWidth;
+            int h = imageFile.AreaOfInterestHeight;
 
-			return $"{x},{y},{w},{h}";
+            return $"{x},{y},{w},{h}";
         }
 
         private static string ResolveImageUrl(ContentReference image)
@@ -76,4 +77,14 @@ namespace AlloyDemoKit
             return UrlResolver.Current.GetUrl(image);
         }
     }
+
+    public class SmartCropCalculator
+    {
+        public Rectangle CalculateCrop(Size imageSize, Rectangle areaOfInterests, Size cropSize)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
 }
+
