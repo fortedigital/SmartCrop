@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using AlloyDemoKit.Models.Media;
 using EPiServer.Core;
+using EPiServer.Web;
 
 namespace AlloyDemoKit.Models.Pages
 {
@@ -12,6 +14,7 @@ namespace AlloyDemoKit.Models.Pages
     [SiteImageUrl(Global.StaticGraphicsFolderPath + "page-type-thumbnail-article.png")]
     public class ArticlePage : StandardPage
     {
+        [UIHint(UIHint.Image)]
         public virtual ContentReference Image { get; set; }
     }
 }
