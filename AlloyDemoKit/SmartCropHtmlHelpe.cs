@@ -51,8 +51,9 @@ namespace AlloyDemoKit
             }
 
 
+            var separator = imageBaseUrl.Contains("?") ? "&" : "?";
 
-            var imageUrl = imageBaseUrl + "?" + string.Join("&", parameters);
+            var imageUrl = imageBaseUrl + separator + string.Join("&", parameters);
 
 
             TagBuilder tagBuilder = new TagBuilder("img");
