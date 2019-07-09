@@ -1,12 +1,11 @@
-﻿using System;
-using System.Drawing;
-using AlloyDemoKit;
+﻿using System.Drawing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SmartCrop;
 
-namespace SmartCropTests
+namespace SmartCrop.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class SmartCropTests
     {
         [TestMethod]
         public void CropLeftWithoutResize()

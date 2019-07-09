@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Web.Mvc;
-using AlloyDemoKit.Models.Media;
+using SmartCrop.Models.Media;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
-using ImageResizer.Plugins.EPiServer;
 
-namespace AlloyDemoKit
+namespace SmartCrop
 {
     public static class SmartCropHtmlHelper
     {

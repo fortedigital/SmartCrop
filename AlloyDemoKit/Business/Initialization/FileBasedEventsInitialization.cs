@@ -24,8 +24,9 @@ namespace AlloyDemoKit.Business.Initialization
 
         private void SavingMediaFile(object sender, EPiServer.ContentEventArgs e)
         {
-            if (!(e.Content is MediaData content))
+            if (!(e.Content is MediaData) || e.Content is ImageData)
                 return;
+            var content = (MediaData) e.Content;
             var fs = FileReader.GetFileSize(content);
 
             var mediaFile = content as IFileProperties;

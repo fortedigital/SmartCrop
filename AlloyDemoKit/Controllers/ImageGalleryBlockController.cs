@@ -9,7 +9,7 @@ using EPiServer.Web;
 using EPiServer.Web.Mvc;
 using AlloyDemoKit.Models.Blocks;
 using EPiServer.ServiceLocation;
-using AlloyDemoKit.Models.Media;
+using SmartCrop.Models.Media;
 
 namespace AlloyDemoKit.Controllers
 {

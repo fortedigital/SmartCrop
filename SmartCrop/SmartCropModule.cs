@@ -1,24 +1,27 @@
 ﻿using System;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using AlloyDemoKit.Models.Media;
+using System.Runtime.CompilerServices;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
+using EPiServer.Logging;
 using EPiServer.Shell;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+using SmartCrop.Models.Media;
 
-namespace AlloyDemoKit
+namespace SmartCrop
 {
     [ModuleDependency(typeof(ShellInitialization))]
     [InitializableModule]
     public class SmartCropModule : IInitializableModule
     {
-	    const string ApiKey = "0aae81ed8f2f43fbb05547107a53decd";
 	    private const int MaxSize = 1024;
+        private static readonly ILogger Logger = LogManager.GetLogger();
 
 		public void Initialize(InitializationEngine context)
         {
@@ -27,29 +30,27 @@ namespace AlloyDemoKit
 
         private void HandlePublishingContent(object sender, ContentEventArgs e)
         {
-            if (e.Content is ImageFile)
+            if (e.Content is ImageFile imageFile)
             {
-                var imageFile = (ImageFile)e.Content;
-				
-
                 if (imageFile.SmartCropEnabled)
                 {
                     using (var stream = ReadBlob(imageFile))
                     {
-	                    var originalImage = Image.FromStream(stream);
-	                  
-	                    var resizedImage = ResizeImage(originalImage, MaxSize);
+                        var originalImage = Image.FromStream(stream);
 
-						var boundingRect = GetAreaOfInterest(resizedImage);
+                        var resizedImage = ResizeImage(originalImage, MaxSize);
 
-						double scaleX = 1.0 / (resizedImage.Width  / (double)originalImage.Width);
-						double scaleY = 1.0 / (resizedImage.Height / (double)originalImage.Height);
+                        var boundingRect = GetAreaOfInterest(resizedImage) ?? new BoundingRect();
 
-						imageFile.AreaOfInterestX = (int)(boundingRect.X * scaleX);
-						imageFile.AreaOfInterestY = (int)(boundingRect.Y * scaleY);
-						imageFile.AreaOfInterestWidth = (int)(boundingRect.W * scaleX);
-						imageFile.AreaOfInterestHeight = (int)(boundingRect.H * scaleY);
-					}
+                        double scaleX = 1.0 / (resizedImage.Width / (double)originalImage.Width);
+                        double scaleY = 1.0 / (resizedImage.Height / (double)originalImage.Height);
+
+                        imageFile.AreaOfInterestX = (int)(boundingRect.X * scaleX);
+                        imageFile.AreaOfInterestY = (int)(boundingRect.Y * scaleY);
+                        imageFile.AreaOfInterestWidth = (int)(boundingRect.W * scaleX);
+                        imageFile.AreaOfInterestHeight = (int)(boundingRect.H * scaleY);
+                        imageFile.SmartCropEnabled = true;
+                    }
                 }
             }
 
@@ -97,20 +98,40 @@ namespace AlloyDemoKit
 				image.Save(imageStream, ImageFormat.Png);
 				imageStream.Seek(0L, SeekOrigin.Begin);
 
-				var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(ApiKey))
-		        {
-			        Endpoint = "https://westcentralus.api.cognitive.microsoft.com"
-		        };
+                string key = ConfigurationManager.AppSettings["CognitiveServicesApiKey"];
+                string server = ConfigurationManager.AppSettings["CognitiveServicesServer"];
 
-		        var result = client.GetAreaOfInterestInStreamWithHttpMessagesAsync(imageStream).Result;
-		        return result.Body.AreaOfInterest;
-	        }
+				var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(key))
+		        {
+			        Endpoint = server
+		        };
+                try
+                {
+                    var result = client.GetAreaOfInterestInStreamWithHttpMessagesAsync(imageStream).Result;
+                    return result.Body.AreaOfInterest;
+                }
+                catch (AggregateException exceptions)
+                {
+                    exceptions.Handle(ex => HandleException(ex));
+                    return null;
+                }
+            }
         }
 
+        public static bool HandleException(Exception ex)
+        {
+            if (ex is ComputerVisionErrorException exception)
+            {
+                Logger.Error(exception.Body.ToString());
+                return true;
+            }
+
+            return false;
+        }
 
 		public void Uninitialize(InitializationEngine context)
         {
-
+            context.Locate.ContentEvents().PublishingContent -= new EventHandler<ContentEventArgs>(this.HandlePublishingContent);
         }
     }
 }

@@ -1,11 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28822.285
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlloyDemoKit", "AlloyDemoKit\AlloyDemoKit.csproj", "{6FA51284-08EC-4032-AF77-D6F2ECA790D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherService", "WeatherService\WeatherService.csproj", "{847FDA30-8EC3-48CD-B82B-D7FC4BD54621}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCrop", "SmartCrop\SmartCrop.csproj", "{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A91EA98C-A168-4C45-8CD0-4529E3555536}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCrop.Tests", "SmartCrop.Tests\SmartCrop.Tests.csproj", "{CBDE38BB-7D9A-43D0-8E9F-70753A187A71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +24,14 @@ Global
 		{6FA51284-08EC-4032-AF77-D6F2ECA790D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FA51284-08EC-4032-AF77-D6F2ECA790D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FA51284-08EC-4032-AF77-D6F2ECA790D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{847FDA30-8EC3-48CD-B82B-D7FC4BD54621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{847FDA30-8EC3-48CD-B82B-D7FC4BD54621}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{847FDA30-8EC3-48CD-B82B-D7FC4BD54621}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{847FDA30-8EC3-48CD-B82B-D7FC4BD54621}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBDE38BB-7D9A-43D0-8E9F-70753A187A71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBDE38BB-7D9A-43D0-8E9F-70753A187A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBDE38BB-7D9A-43D0-8E9F-70753A187A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBDE38BB-7D9A-43D0-8E9F-70753A187A71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
