@@ -35,15 +35,19 @@ namespace SmartCrop
             {
                 parameters.Add("crop=" + CalculateCropBounds(imageFile, width.Value, height.Value));
             }
+            else
+            {
+                if (width != null)
+                {
+                    parameters.Add("width=" + width.ToString());
+                }
 
-            if (width != null)
-            {
-                parameters.Add("width=" + width.ToString());
+                if (height != null)
+                {
+                    parameters.Add("height=" + height.ToString());
+                }
             }
-            if (height != null)
-            {
-                parameters.Add("height=" + height.ToString());
-            }
+
             if (isCrop)
             {
                 parameters.Add("mode=crop");
@@ -79,44 +83,43 @@ namespace SmartCrop
 				double originalRatio = originalImage.Width / (double)originalImage.Height;
 
 				var cropQuery = string.Empty;
+                var cropX = 0.0;
+                var cropY = 0.0;
 				if (cropRatio < originalRatio)
 				{
 					var boundingRectHeight = originalImage.Height;
 					var boundingRectWidth = boundingRectHeight * cropRatio;
 
 					var xFocalPoint = areaW / 2 + areaX;
-					var cropX = xFocalPoint - boundingRectWidth / 2;
+					cropX = xFocalPoint - boundingRectWidth / 2;
 					if (cropX < 0)
 						cropX = 0;
 
 					if (cropX + boundingRectWidth > originalImage.Width)
 						cropX = originalImage.Width - boundingRectWidth;
 
-					var cropY = 0.0;
-
-					cropQuery = $"{cropX},{cropY},{cropX + boundingRectWidth},{cropY + boundingRectHeight}";
+                    cropQuery = $"{cropX},{cropY},{boundingRectWidth},{boundingRectHeight}";
 				}
 				else
 				{
 					var boundingRectWidth = originalImage.Width;
 					var boundingRectHeight = boundingRectWidth / cropRatio;
 
-
-
-					var yFocalPoint = areaH / 2 + areaY;
-					var cropY = yFocalPoint - boundingRectHeight / 2;
+                    var yFocalPoint = areaH / 2 + areaY;
+					cropY = yFocalPoint - boundingRectHeight / 2;
 					if (cropY < 0)
 						cropY = 0;
 
 					if (cropY + boundingRectHeight > originalImage.Height)
 						cropY = originalImage.Height - boundingRectHeight;
 
-					var cropX = 0.0;
-
-					cropQuery = $"{cropX},{cropY},{cropX + boundingRectWidth},{cropY + boundingRectHeight}";
+                    cropQuery = $"{cropX},{cropY},{boundingRectWidth},{boundingRectHeight}";
 				}
 
-				return cropQuery;
+                cropQuery += cropX < width ? $"&width={width + cropX}" : $"&width={width}";
+                cropQuery += cropY < height ? $"&height={height + cropY}" : $"&height={height}";
+                
+                return cropQuery;
 	        }
         }
 
