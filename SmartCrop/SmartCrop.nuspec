@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Forte.SmartCrop</id>
+    <version>$version$</version>
+    <title>Forte.SmartCrop</title>
+    <authors>Forte_ Digital</authors>
+    <projectUrl>https://github.com/fortedigital/SmartCrop</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Content-aware image cropping tool for EPiServer using Azure Cognitive Services</description>
+    <copyright>Copyright 2019</copyright>
+	<dependencies>
+            <dependency id="EPiServer.CMS.Core" version="[11.11.0, 12)" />
+            <dependency id="EPiServer.Framework" version="[11.11.0, 12)" />
+            <dependency id="EPiServer.CMS.UI.Core" version="[11.17.1, 12)" />
+            <dependency id="Microsoft.Azure.CognitiveServices.Vision.ComputerVision" version="5.0.0" />
+    </dependencies>
+  </metadata>
+</package>
