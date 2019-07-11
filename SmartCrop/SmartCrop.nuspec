@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Forte.SmartCrop</id>
-    <version>$version$</version>
+    <version>1.0.0</version>
     <title>Forte.SmartCrop</title>
     <authors>Forte_ Digital</authors>
     <projectUrl>https://github.com/fortedigital/SmartCrop</projectUrl>
