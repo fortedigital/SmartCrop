@@ -944,7 +944,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_Data\DefaultSiteContent.episerverdata" />
     <None Include="EPiServerLog.config">
       <SubType>Designer</SubType>
     </None>
@@ -1080,6 +1079,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="ClientResources\Scripts\" />
     <Folder Include="Models\Register\" />
     <Folder Include="modules\_protected\EPiServer.Labs.LanguageManager\" />
