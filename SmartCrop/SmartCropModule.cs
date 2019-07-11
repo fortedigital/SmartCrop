@@ -12,9 +12,9 @@ using EPiServer.Logging;
 using EPiServer.Shell;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
-using SmartCrop.Models.Media;
+using Forte.SmartCrop.Models.Media;
 
-namespace SmartCrop
+namespace Forte.SmartCrop
 {
     [ModuleDependency(typeof(ShellInitialization))]
     [InitializableModule]

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using EPiServer.Core;
 using EPiServer.Validation;
-using SmartCrop.Models.Media;
+using Forte.SmartCrop.Models.Media;
 
-namespace SmartCrop
+namespace Forte.SmartCrop
 {
     public class ImageFileValidator : IValidate<ImageFile>
     {

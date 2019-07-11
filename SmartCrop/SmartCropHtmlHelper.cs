@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Web.Mvc;
-using SmartCrop.Models.Media;
+using Forte.SmartCrop.Models.Media;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 
-namespace SmartCrop
+namespace Forte.SmartCrop
 {
     public static class SmartCropHtmlHelper
     {
