@@ -772,7 +772,6 @@
     <Content Include="modules\_protected\EPiServer.Forms.Samples\Views\ElementBlocks\RecaptchaElementBlock.ascx" />
     <Content Include="modules\_protected\EPiServer.Forms.Samples\Views\Shared\EditorTemplates\FormModel.ascx" />
     <Content Include="modules\_protected\EPiServer.Marketing.Testing\abcapture\capture.js" />
-    <Content Include="modules\_protected\EPiServer.Marketing.Testing\abcapture\phantomjs.exe" />
     <Content Include="modules\_protected\ImageProcessor.Web.Episerver.UI\ipepi.png" />
     <Content Include="NotFound.aspx" />
     <Content Include="Static\css\VisitorGroupUIOverrides.css" />

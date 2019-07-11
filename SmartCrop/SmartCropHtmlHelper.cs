@@ -147,7 +147,7 @@ namespace Forte.SmartCrop
     {
         public Rectangle CalculateCrop(Size imageSize, Rectangle areaOfInterests, Size cropSize)
         {
-            throw new NotImplementedException();
+            return new Rectangle(0,0, 50, 50);
         }
 
     }
