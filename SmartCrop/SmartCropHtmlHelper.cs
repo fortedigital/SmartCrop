@@ -145,9 +145,42 @@ namespace Forte.SmartCrop
 
     public class SmartCropCalculator
     {
-        public Rectangle CalculateCrop(Size imageSize, Rectangle areaOfInterests, Size cropSize)
+        public RectangleF CalculateCrop(SizeF imageSize, RectangleF areaOfInterests, SizeF cropSize)
         {
-            return new Rectangle(0,0, 50, 50);
+            double cropRatio = cropSize.Width / (double)cropSize.Height;
+            double originalRatio = imageSize.Width / (double)imageSize.Height;
+            
+            var cropX = 0.0;
+            var cropY = 0.0;
+            var boundingRectHeight = 0.0;
+            var boundingRectWidth = 0.0;
+            if (cropRatio < originalRatio)
+            {
+                boundingRectHeight = imageSize.Height;
+                boundingRectWidth = boundingRectHeight * cropRatio;
+
+                var xFocalPoint = areaOfInterests.Width / 2 + areaOfInterests.X;
+                cropX = xFocalPoint - boundingRectWidth / 2;
+                if (cropX < 0)
+                    cropX = 0;
+
+                if (cropX + boundingRectWidth > imageSize.Width)
+                    cropX = imageSize.Width - boundingRectWidth;
+            }
+            else
+            {
+                boundingRectWidth = imageSize.Width;
+                boundingRectHeight = boundingRectWidth / cropRatio;
+
+                var yFocalPoint = areaOfInterests.Height / 2 + areaOfInterests.Y;
+                cropY = yFocalPoint - boundingRectHeight / 2;
+                if (cropY < 0)
+                    cropY = 0;
+
+                if (cropY + boundingRectHeight > imageSize.Height)
+                    cropY = imageSize.Height - boundingRectHeight;
+            }
+            return new RectangleF((float)cropX, (float)cropY, (float)boundingRectWidth, (float)boundingRectHeight);
         }
 
     }
