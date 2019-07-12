@@ -1,4 +1,5 @@
-﻿using EPiServer.Core;
+﻿using System.ComponentModel.DataAnnotations;
+using EPiServer.Core;
 using EPiServer.DataAnnotations;
 using ImageResizer.Plugins.EPiFocalPoint;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
@@ -17,8 +18,10 @@ namespace Forte.SmartCrop.Models.Media
         [BackingType(typeof(PropertyFocalPoint))]
         public virtual FocalPoint FocalPoint { get; set; }
 
+        [ScaffoldColumn(false)]
         public virtual int? OriginalWidth { get; set; }
 
+        [ScaffoldColumn(false)]
         public virtual int? OriginalHeight { get; set; }
     }
 }

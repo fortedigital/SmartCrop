@@ -17,4 +17,7 @@
 			<dependency id="ImageResizer.Plugins.EPiFocalPoint" version="2.0.1.0"/>
     </dependencies>
   </metadata>
+  <files>
+        <file src="bin/Forte.SmartCrop.dll" target="lib\net462" />
+  </files>
 </package>
