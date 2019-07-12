@@ -12,6 +12,7 @@ using EPiServer.Shell;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Forte.SmartCrop.Models.Media;
+using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 
 namespace Forte.SmartCrop
 {
@@ -51,6 +52,11 @@ namespace Forte.SmartCrop
 
                         imageFile.FocalPointX = areaOfInterestX + areaOfInterestWidth / 2;
                         imageFile.FocalPointY = areaOfInterestY + areaOfInterestHeight / 2;
+                        imageFile.FocalPoint = new FocalPoint()
+                        {
+                            X = 100 * imageFile.FocalPointX / (double) originalImage.Width,
+                            Y = 100 * imageFile.FocalPointY / (double) originalImage.Height
+                        };
                     }
                 }
             }
