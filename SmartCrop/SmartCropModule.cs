@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.CompilerServices;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
@@ -13,6 +12,7 @@ using EPiServer.Shell;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Forte.SmartCrop.Models.Media;
+using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 
 namespace Forte.SmartCrop
 {
@@ -25,12 +25,12 @@ namespace Forte.SmartCrop
 
 		public void Initialize(InitializationEngine context)
         {
-            context.Locate.ContentEvents().PublishingContent += new EventHandler<ContentEventArgs>(this.HandlePublishingContent);
+            context.Locate.ContentEvents().PublishingContent += HandlePublishingContent;
         }
 
         private void HandlePublishingContent(object sender, ContentEventArgs e)
         {
-            if (e.Content is ImageFile imageFile)
+            if (e.Content is FocalImageData imageFile)
             {
                 if (imageFile.SmartCropEnabled)
                 {
@@ -45,11 +45,18 @@ namespace Forte.SmartCrop
                         double scaleX = 1.0 / (resizedImage.Width / (double)originalImage.Width);
                         double scaleY = 1.0 / (resizedImage.Height / (double)originalImage.Height);
 
-                        imageFile.AreaOfInterestX = (int)(boundingRect.X * scaleX);
-                        imageFile.AreaOfInterestY = (int)(boundingRect.Y * scaleY);
-                        imageFile.AreaOfInterestWidth = (int)(boundingRect.W * scaleX);
-                        imageFile.AreaOfInterestHeight = (int)(boundingRect.H * scaleY);
-                        imageFile.SmartCropEnabled = true;
+                        var areaOfInterestX = (int)(boundingRect.X * scaleX);
+                        var areaOfInterestY = (int)(boundingRect.Y * scaleY);
+                        var areaOfInterestWidth = (int)(boundingRect.W * scaleX);
+                        var areaOfInterestHeight = (int)(boundingRect.H * scaleY);
+
+                        imageFile.FocalPointX = areaOfInterestX + areaOfInterestWidth / 2;
+                        imageFile.FocalPointY = areaOfInterestY + areaOfInterestHeight / 2;
+                        imageFile.FocalPoint = new FocalPoint()
+                        {
+                            X = 100 * imageFile.FocalPointX / (double) originalImage.Width,
+                            Y = 100 * imageFile.FocalPointY / (double) originalImage.Height
+                        };
                     }
                 }
             }
@@ -79,7 +86,7 @@ namespace Forte.SmartCrop
 			return originalImage.GetThumbnailImage(w, h, null, IntPtr.Zero);
         }
 
-		private static MemoryStream ReadBlob(ImageFile content)
+		private static MemoryStream ReadBlob(FocalImageData content)
         {
             using (var stream = content.BinaryData.OpenRead())
             {
@@ -131,7 +138,7 @@ namespace Forte.SmartCrop
 
 		public void Uninitialize(InitializationEngine context)
         {
-            context.Locate.ContentEvents().PublishingContent -= new EventHandler<ContentEventArgs>(this.HandlePublishingContent);
+            context.Locate.ContentEvents().PublishingContent -= HandlePublishingContent;
         }
     }
 }

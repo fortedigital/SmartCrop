@@ -8,8 +8,8 @@ using EPiServer.Core;
 using EPiServer.Web;
 using EPiServer.Web.Mvc;
 using AlloyDemoKit.Models.Blocks;
+using AlloyDemoKit.Models.Media;
 using EPiServer.ServiceLocation;
-using Forte.SmartCrop.Models.Media;
 
 namespace AlloyDemoKit.Controllers
 {

@@ -1,5 +1,5 @@
 using System.Web.Mvc;
-using Forte.SmartCrop.Models.Media;
+using AlloyDemoKit.Models.Media;
 using AlloyDemoKit.Models.ViewModels;
 using EPiServer.Web.Mvc;
 using EPiServer.Web.Routing;

@@ -260,6 +260,9 @@
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageResizer.4.0.1\lib\net45\ImageResizer.dll</HintPath>
     </Reference>
+    <Reference Include="ImageResizer.Plugins.EPiFocalPoint, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageResizer.Plugins.EPiFocalPoint.2.0.1\lib\net461\ImageResizer.Plugins.EPiFocalPoint.dll</HintPath>
+    </Reference>
     <Reference Include="ImageResizer.Plugins.EPiServerBlobReader, Version=7.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageResizer.Plugins.EPiServerBlobReader.7.2.0\lib\net461\ImageResizer.Plugins.EPiServerBlobReader.dll</HintPath>
     </Reference>
@@ -626,6 +629,7 @@
     <Compile Include="Models\Blocks\YouTubeBlock.cs" />
     <Compile Include="Models\Media\GenericMedia.cs" />
     <Compile Include="Models\Media\IFileProperties.cs" />
+    <Compile Include="Models\Media\ImageFile.cs" />
     <Compile Include="Models\Media\PDFFile.cs" />
     <Compile Include="Models\Media\VideoFile.cs" />
     <Compile Include="Models\Pages\ArticlePage.cs" />
@@ -692,6 +696,9 @@
     <Content Include="AddOns\Core\SearchAndReplace.aspx" />
     <Content Include="AddOns\Core\TimeMachine.aspx" />
     <Content Include="AdminTools\EmployeeSettings.aspx" />
+    <Content Include="ClientResources\focalpoint\Editor.js" />
+    <Content Include="ClientResources\focalpoint\WidgetTemplate.css" />
+    <Content Include="ClientResources\focalpoint\WidgetTemplate.html" />
     <Content Include="ClientResources\Images\icons\pdf-icon16x16.png" />
     <Content Include="ClientResources\Images\icons\pdf-icon32x32.png" />
     <Content Include="ClientResources\Styles\ContentColabFix.css" />
