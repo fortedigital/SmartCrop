@@ -132,7 +132,7 @@ namespace Forte.SmartCrop
 
 		public void Uninitialize(InitializationEngine context)
         {
-            context.Locate.ContentEvents().PublishingContent -= new EventHandler<ContentEventArgs>(this.HandlePublishingContent);
+            context.Locate.ContentEvents().PublishingContent -= HandlePublishingContent;
         }
     }
 }
