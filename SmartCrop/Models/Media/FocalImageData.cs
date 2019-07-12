@@ -1,4 +1,5 @@
 ﻿using EPiServer.Core;
+using EPiServer.DataAnnotations;
 using ImageResizer.Plugins.EPiFocalPoint;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 
@@ -13,10 +14,11 @@ namespace Forte.SmartCrop.Models.Media
 
         public virtual bool SmartCropEnabled { get; set; }
 
-        public FocalPoint FocalPoint { get; set; }
+        [BackingType(typeof(PropertyFocalPoint))]
+        public virtual FocalPoint FocalPoint { get; set; }
 
-        public int? OriginalWidth { get; set; }
+        public virtual int? OriginalWidth { get; set; }
 
-        public int? OriginalHeight { get; set; }
+        public virtual int? OriginalHeight { get; set; }
     }
 }
