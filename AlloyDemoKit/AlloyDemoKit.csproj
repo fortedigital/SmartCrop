@@ -626,6 +626,7 @@
     <Compile Include="Models\Blocks\YouTubeBlock.cs" />
     <Compile Include="Models\Media\GenericMedia.cs" />
     <Compile Include="Models\Media\IFileProperties.cs" />
+    <Compile Include="Models\Media\ImageFile.cs" />
     <Compile Include="Models\Media\PDFFile.cs" />
     <Compile Include="Models\Media\VideoFile.cs" />
     <Compile Include="Models\Pages\ArticlePage.cs" />

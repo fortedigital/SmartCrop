@@ -25,7 +25,7 @@ namespace Forte.SmartCrop
                 return MvcHtmlString.Empty;
             }
             string imageBaseUrl = ResolveImageUrl(image);
-            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out ImageFile imageFile);
+            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out FocalImageData imageFile);
 
             var isCrop = width != null && height != null;
 
@@ -66,19 +66,12 @@ namespace Forte.SmartCrop
 
         }
 
-        private static string CalculateCropBounds(ImageFile imageFile, int width, int height)
+        private static string CalculateCropBounds(FocalImageData imageFile, int width, int height)
         {
 	        using (var stream = ReadBlob(imageFile))
 	        {
 		        var originalImage = Image.FromStream(stream);
-		     
-
-		        var areaX = imageFile.AreaOfInterestX;
-		        var areaY = imageFile.AreaOfInterestY;
-				var areaW = imageFile.AreaOfInterestWidth;
-				var areaH = imageFile.AreaOfInterestHeight;
-
-
+                
 				double cropRatio = width / (double)height;
 				double originalRatio = originalImage.Width / (double)originalImage.Height;
 
@@ -89,9 +82,8 @@ namespace Forte.SmartCrop
 				{
 					var boundingRectHeight = originalImage.Height;
 					var boundingRectWidth = boundingRectHeight * cropRatio;
-
-					var xFocalPoint = areaW / 2 + areaX;
-					cropX = xFocalPoint - boundingRectWidth / 2;
+                    
+					cropX = imageFile.FocalPointX - boundingRectWidth / 2;
 					if (cropX < 0)
 						cropX = 0;
 
@@ -104,9 +96,8 @@ namespace Forte.SmartCrop
 				{
 					var boundingRectWidth = originalImage.Width;
 					var boundingRectHeight = boundingRectWidth / cropRatio;
-
-                    var yFocalPoint = areaH / 2 + areaY;
-					cropY = yFocalPoint - boundingRectHeight / 2;
+                    
+					cropY = imageFile.FocalPointY - boundingRectHeight / 2;
 					if (cropY < 0)
 						cropY = 0;
 
@@ -128,7 +119,7 @@ namespace Forte.SmartCrop
             return UrlResolver.Current.GetUrl(image);
         }
 
-        private static MemoryStream ReadBlob(ImageFile content)
+        private static MemoryStream ReadBlob(FocalImageData content)
         {
 	        using (var stream = content.BinaryData.OpenRead())
 	        {

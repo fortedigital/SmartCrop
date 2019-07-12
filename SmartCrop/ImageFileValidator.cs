@@ -9,7 +9,7 @@ using Forte.SmartCrop.Models.Media;
 
 namespace Forte.SmartCrop
 {
-    public class ImageFileValidator : IValidate<ImageFile>
+    public class ImageFileValidator : IValidate<FocalImageData>
     {
         public string ErrorMessage { get; set; }
 
@@ -19,20 +19,18 @@ namespace Forte.SmartCrop
                            "Check your API key and server availability.";
         }
 
-        public IEnumerable<ValidationError> Validate(ImageFile image)
+        public IEnumerable<ValidationError> Validate(FocalImageData image)
         {
-            if (image.SmartCropEnabled 
-                && image.AreaOfInterestX == 0 
-                && image.AreaOfInterestY == 0
-                && image.AreaOfInterestHeight == 0 
-                && image.AreaOfInterestWidth == 0)
+            if (image.SmartCropEnabled
+                && image.FocalPointX == 0
+                && image.FocalPointY == 0)
             {
                 return new ValidationError[]
                 {
                     new ValidationError()
                     {
                         ErrorMessage = ErrorMessage,
-                        PropertyName = image.GetPropertyName<ImageFile>(p => p.Name),
+                        PropertyName = image.GetPropertyName<FocalImageData>(p => p.Name),
                         Severity = ValidationErrorSeverity.Warning,
                         ValidationType = ValidationErrorType.Unspecified
                     }
