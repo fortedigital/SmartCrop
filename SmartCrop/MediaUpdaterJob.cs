@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web.UI.WebControls;
 using EPiServer;
 using EPiServer.Core;
+using EPiServer.DataAccess;
+using EPiServer.Framework.Blobs;
 using EPiServer.Licensing.Services;
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
@@ -44,18 +47,11 @@ namespace Forte.SmartCrop
             OnStatusChanged(String.Format("Starting execution of {0}", this.GetType()));
 
             var assetsRoot = SiteDefinition.Current.GlobalAssetsRoot;
-            UpdateChildren(assetsRoot);
-
-            //For long running jobs periodically check if stop is signaled and if so stop execution
-            if (_stopSignaled)
-            {
-                return "Stop of job was called";
-            }
-
-            return "Image files' properties updated";
+            return UpdateChildren(assetsRoot);
+            
         }
 
-        private void UpdateChildren(ContentReference reference)
+        private string UpdateChildren(ContentReference reference)
         {
             var childrenFolders = _contentRepository.GetChildren<ContentFolder>(reference);
             var images = _contentLoader.GetChildren<ImageData>(reference);
@@ -64,19 +60,31 @@ namespace Forte.SmartCrop
                 UpdateProperties(image);
             }
 
+            //For long running jobs periodically check if stop is signaled and if so stop execution
+            if (_stopSignaled)
+            {
+                return "Stop of job was called";
+            }
+
             foreach (var folder in childrenFolders)
             {
                 UpdateChildren(folder.ContentLink);
             }
+
+            return "Image files' properties updated";
         }
 
         private void UpdateProperties(ImageData image)
         {
-            var focalImage = image as FocalImageData;
+            
+            if(!(image is FocalImageData focalImage))
+                return;
+            
+            //republish image
+            var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
             if (focalImage.SmartCropEnabled)
-            {
+                _contentRepository.Save(file, SaveAction.Publish);
 
-            }
         }
     }
 
