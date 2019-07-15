@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageFileValidator.cs" />
+    <Compile Include="MediaUpdaterJob.cs" />
     <Compile Include="Models\Media\FocalImageData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartCropHtmlHelper.cs" />
