@@ -79,11 +79,13 @@ namespace Forte.SmartCrop
             
             if(!(image is FocalImageData focalImage))
                 return;
-            
-            //republish image
-            var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
-            if (focalImage.SmartCropEnabled)
+
+            if (!focalImage.SmartCropEnabled)
+            {
+                //republish image
+                var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
                 _contentRepository.Save(file, SaveAction.Publish);
+            }
 
         }
     }
