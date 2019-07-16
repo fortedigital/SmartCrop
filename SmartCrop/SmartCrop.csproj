@@ -199,8 +199,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\Plugins\CustomRouteInitializer.cs" />
-    <Compile Include="Business\Plugins\SmartCropAdminPluginController.cs" />
+    <Compile Include="Business\CustomRouteInitializer.cs" />
+    <Compile Include="Controllers\SmartCropAdminPluginController.cs" />
     <Compile Include="ImageFileValidator.cs" />
     <Compile Include="MediaUpdaterJob.cs" />
     <Compile Include="Models\Media\FocalImageData.cs" />
@@ -214,10 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Business\Plugins\Views\Index.cshtml" />
-    <Content Include="Business\Plugins\Views\Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <None Include="Plugins\Index.cshtml" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

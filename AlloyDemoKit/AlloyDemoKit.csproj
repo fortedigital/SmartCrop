@@ -716,7 +716,6 @@
     <Content Include="config\imageprocessor\cache.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Business\Plugins\Views\Index.cshtml" />
     <None Include="Hunspellx64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

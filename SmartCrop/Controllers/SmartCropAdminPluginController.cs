@@ -19,7 +19,7 @@ namespace Forte.SmartCrop.Business.Plugins
 
             var model = new SmartCropAdminPluginViewModel {ImagesEnumerable = images};
 
-            return View("~/Business/Plugins/Views/Index.cshtml", model);
+            return View("~/modules/_protected/Forte.SmartCrop/Index.cshtml", model);
         }
 
         private static IEnumerable<ImageData> GetAllImages()
