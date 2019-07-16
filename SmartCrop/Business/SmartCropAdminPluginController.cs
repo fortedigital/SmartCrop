@@ -21,9 +21,11 @@ namespace Forte.SmartCrop.Business
         }
 
         [HttpPost]
-        public ActionResult Action()
+        public ActionResult Action(SmartCropAdminPluginViewModel model)
         {
-            
+            //do action
+
+            return View("~/modules/_protected/Forte.SmartCrop/Index.cshtml", model);
         }
 
     }

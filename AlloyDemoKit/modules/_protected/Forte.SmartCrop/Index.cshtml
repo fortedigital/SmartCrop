@@ -1,8 +1,18 @@
 ﻿@inherits System.Web.Mvc.WebViewPage<Forte.SmartCrop.Models.ViewModels.SmartCropAdminPluginViewModel>
+@using System.Web.Mvc
 @using System.Web.Mvc.Html
 
 @{
     Layout = null;
 }
 
-<h1>Hello there</h1>
+<h4>Enable/Disable SmartCrop for all images</h4>
+Disabling SmartCrop will disable connection to Azure services<br />
+and FocalPoint properties will be unset.<br /><br />
+
+@using (Html.BeginForm("Action", "SmartCropAdminPlugin"))
+{
+
+    <text>Enable SmartCrop:</text> @Html.CheckBox("IsSmartCropEnabled")<br />
+    <button>Update</button>
+}
