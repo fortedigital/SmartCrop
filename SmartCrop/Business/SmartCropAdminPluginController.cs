@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.PlugIn;
-using EPiServer.Security;
 using Forte.SmartCrop.Models.ViewModels;
 
 namespace Forte.SmartCrop.Business
@@ -15,16 +14,17 @@ namespace Forte.SmartCrop.Business
         // GET
         public ActionResult Index()
         {
-            var images = GetAllImages();
 
-            var model = new SmartCropAdminPluginViewModel {ImagesEnumerable = images};
+            var model = new SmartCropAdminPluginViewModel {IsSmartCropEnabled = true};
 
             return View("~/modules/_protected/Forte.SmartCrop/Index.cshtml", model);
         }
 
-        private static IEnumerable<ImageData> GetAllImages()
+        [HttpPost]
+        public ActionResult Action()
         {
-            return Enumerable.Empty<ImageData>();
+            
         }
+
     }
 }

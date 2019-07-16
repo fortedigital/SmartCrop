@@ -6,7 +6,6 @@ namespace Forte.SmartCrop.Models.ViewModels
 {
     public class SmartCropAdminPluginViewModel
     {
-        public IEnumerable<ImageData> ImagesEnumerable { get; set; }
-        
+        public bool IsSmartCropEnabled { get; set; }
     }
 }
