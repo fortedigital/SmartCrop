@@ -201,6 +201,7 @@
   <ItemGroup>
     <Compile Include="Business\CustomRouteInitializer.cs" />
     <Compile Include="Business\SmartCropAdminPluginController.cs" />
+    <Compile Include="Business\SmartCropAdminPluginSettings.cs" />
     <Compile Include="ImageFileValidator.cs" />
     <Compile Include="MediaUpdaterJob.cs" />
     <Compile Include="Models\Media\FocalImageData.cs" />

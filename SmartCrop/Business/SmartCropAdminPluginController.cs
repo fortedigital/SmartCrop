@@ -15,11 +15,18 @@ namespace Forte.SmartCrop.Business
         Url = "/custom-plugins/smartcrop-plugin")]
     public class SmartCropAdminPluginController : Controller
     {
+        private SmartCropAdminPluginSettings _settings;
+
+        public SmartCropAdminPluginController()
+        {
+            _settings = new SmartCropAdminPluginSettings();
+        }
+
         // GET
         public ActionResult Index()
         {
 
-            var model = new SmartCropAdminPluginViewModel {IsSmartCropEnabled = true};
+            var model = new SmartCropAdminPluginViewModel {IsSmartCropEnabled = GetSmartCropSetting()};
 
             return View("~/modules/_protected/Forte.SmartCrop/Index.cshtml", model);
         }
@@ -27,23 +34,14 @@ namespace Forte.SmartCrop.Business
         [HttpPost]
         public ActionResult Action(SmartCropAdminPluginViewModel model)
         {
-            SetSmartCropProperty(model.IsSmartCropEnabled);
+            _settings.SaveSettings(model.IsSmartCropEnabled);
             return View("~/modules/_protected/Forte.SmartCrop/Index.cshtml", model);
         }
 
-        private void SetSmartCropProperty(bool isEnabled)
+        public bool GetSmartCropSetting()
         {
-            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var media = contentRepository.GetDescendents(SiteDefinition.Current.GlobalAssetsRoot)
-                .Where(r => contentRepository.Get<IContent>(r) is FocalImageData).Select(contentRepository.Get<FocalImageData>);
-
-            foreach (var image in media)
-            {
-                var file = contentRepository.Get<FocalImageData>(image.ContentLink).CreateWritableClone() as FocalImageData;
-                file.SmartCropEnabled = isEnabled;
-                contentRepository.Save(file, SaveAction.ForceCurrentVersion);
-            }
+            return _settings.LoadSettings();
         }
-
+        
     }
 }
