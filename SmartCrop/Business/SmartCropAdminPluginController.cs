@@ -6,7 +6,7 @@ using EPiServer.PlugIn;
 using EPiServer.Security;
 using Forte.SmartCrop.Models.ViewModels;
 
-namespace Forte.SmartCrop.Business.Plugins
+namespace Forte.SmartCrop.Business
 {
     [GuiPlugIn(DisplayName = "Manage SmartCrop", Area = PlugInArea.AdminMenu,
         Url = "/custom-plugins/smartcrop-plugin")]

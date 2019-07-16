@@ -3,7 +3,7 @@ using System.Web.Routing;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 
-namespace Forte.SmartCrop.Business.Plugins
+namespace Forte.SmartCrop.Business
 {
     [InitializableModule]
     public class CustomRouteInitializer : IInitializableModule
