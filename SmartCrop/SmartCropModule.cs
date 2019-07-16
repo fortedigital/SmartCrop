@@ -9,6 +9,7 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
 using EPiServer.Shell;
+using Forte.SmartCrop.Business;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Forte.SmartCrop.Models.Media;
@@ -22,6 +23,7 @@ namespace Forte.SmartCrop
     {
 	    private const int MaxSize = 1024;
         private static readonly ILogger Logger = LogManager.GetLogger();
+        private SmartCropAdminPluginSettings _settings = new SmartCropAdminPluginSettings();
 
 		public void Initialize(InitializationEngine context)
         {
@@ -32,7 +34,7 @@ namespace Forte.SmartCrop
         {
             if (e.Content is FocalImageData imageFile)
             {
-                if (imageFile.FocalPoint == null)
+                if (_settings.LoadSettings())
                 {
                     using (var stream = ReadBlob(imageFile))
                     {
