@@ -2,8 +2,10 @@
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
+using EPiServer.Logging;
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
+using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using Forte.SmartCrop.Models.Media;
 using SiteDefinition = EPiServer.Web.SiteDefinition;
@@ -16,6 +18,7 @@ namespace Forte.SmartCrop
         private bool _stopSignaled;
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         private readonly IContentLoader _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+        private readonly ILogger Logger = LogManager.GetLogger();
 
         protected bool SetForAll;
 
@@ -79,7 +82,15 @@ namespace Forte.SmartCrop
             {
                 //republish image
                 var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
-                _contentRepository.Save(file, SaveAction.Publish);
+                try
+                {
+                    _contentRepository.Save(file, SaveAction.Publish | SaveAction.ForceCurrentVersion);
+                }
+                catch (AccessDeniedException ex)
+                {
+                    Logger.Error(ex.Message);
+                }
+
             }
 
         }
