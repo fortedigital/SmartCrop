@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Web.UI.WebControls;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
-using EPiServer.Framework.Blobs;
-using EPiServer.Licensing.Services;
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
@@ -16,13 +10,14 @@ using SiteDefinition = EPiServer.Web.SiteDefinition;
 
 namespace Forte.SmartCrop
 {
-    [ScheduledPlugIn(DisplayName = "Update Image Properties", GUID = "DF91149F-796B-441F-A9C0-CF88D38FF58F", 
-        Description = "Goes over image files and updates focal point properties")]
+    
     public class MediaUpdaterJob : ScheduledJobBase
     {
         private bool _stopSignaled;
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         private readonly IContentLoader _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+
+        protected bool SetForAll;
 
         public MediaUpdaterJob()
         {
@@ -80,7 +75,7 @@ namespace Forte.SmartCrop
             if(!(image is FocalImageData focalImage))
                 return;
 
-            if (!focalImage.SmartCropEnabled)
+            if (SetForAll || focalImage.FocalPoint == null)
             {
                 //republish image
                 var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
@@ -90,7 +85,27 @@ namespace Forte.SmartCrop
         }
     }
 
+    [ScheduledPlugIn(DisplayName = "Set FocalPoint For Unset Images", GUID = "DF91149F-796B-441F-A9C0-CF88D38FF58F",
+        Description = "Goes over image files and updates focal point properties for unset images")]
+    public class UpdateUnsetImages : MediaUpdaterJob
+    {
 
+        public UpdateUnsetImages()
+        {
+            SetForAll = false;
+        }
 
+    }
+
+    [ScheduledPlugIn(DisplayName = "Set FocalPoint For All Images", GUID = "515A9EFA-910F-4A19-8B50-DE60678A097E",
+        Description = "Goes over image files and updates all of them with focal point properties")]
+    public class UpdateAllImages : MediaUpdaterJob
+    {
+
+        public UpdateAllImages()
+        {
+            SetForAll = true;
+        }
+    }
 
 }

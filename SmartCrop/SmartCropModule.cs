@@ -32,7 +32,7 @@ namespace Forte.SmartCrop
         {
             if (e.Content is FocalImageData imageFile)
             {
-                if (imageFile.SmartCropEnabled)
+                if (imageFile.FocalPoint == null)
                 {
                     using (var stream = ReadBlob(imageFile))
                     {
@@ -42,13 +42,13 @@ namespace Forte.SmartCrop
 
                         var boundingRect = GetAreaOfInterest(resizedImage) ?? new BoundingRect();
 
-                        double scaleX = 1.0 / (resizedImage.Width / (double)originalImage.Width);
-                        double scaleY = 1.0 / (resizedImage.Height / (double)originalImage.Height);
+                        double scaleX = 1.0 / (resizedImage.Width / (double) originalImage.Width);
+                        double scaleY = 1.0 / (resizedImage.Height / (double) originalImage.Height);
 
-                        var areaOfInterestX = (int)(boundingRect.X * scaleX);
-                        var areaOfInterestY = (int)(boundingRect.Y * scaleY);
-                        var areaOfInterestWidth = (int)(boundingRect.W * scaleX);
-                        var areaOfInterestHeight = (int)(boundingRect.H * scaleY);
+                        var areaOfInterestX = (int) (boundingRect.X * scaleX);
+                        var areaOfInterestY = (int) (boundingRect.Y * scaleY);
+                        var areaOfInterestWidth = (int) (boundingRect.W * scaleX);
+                        var areaOfInterestHeight = (int) (boundingRect.H * scaleY);
 
                         imageFile.FocalPointX = areaOfInterestX + areaOfInterestWidth / 2;
                         imageFile.FocalPointY = areaOfInterestY + areaOfInterestHeight / 2;
