@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EPiServer.Core;
+using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using ImageResizer.Plugins.EPiFocalPoint;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
@@ -23,5 +24,11 @@ namespace Forte.SmartCrop.Models.Media
 
         [ScaffoldColumn(false)]
         public virtual int? OriginalHeight { get; set; }
+
+        public override void SetDefaultValues(ContentType contentType)
+        {
+            base.SetDefaultValues(contentType);
+            this.SmartCropEnabled = true;
+        }
     }
 }

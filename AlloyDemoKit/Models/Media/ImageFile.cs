@@ -19,12 +19,6 @@ namespace AlloyDemoKit.Models.Media
         /// </value>
         public virtual string Copyright { get; set; }
         
-
-        public override void SetDefaultValues(ContentType contentType)
-        {
-            base.SetDefaultValues(contentType);
-            this.SmartCropEnabled = true;
-        }
     }
 
 }
