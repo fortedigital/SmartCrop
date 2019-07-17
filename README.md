@@ -14,22 +14,12 @@ Example:
   </appSettings>
 ```
 
-2. Make your ImageFile model inherit from FocalPointData
-
-3. Add SetDefaultValues method to model
+2. Make your ImageFile model inherit from FocalImageData
 
 Example:
 
 ```csharp
 public class ImageFile : FocalImageData
-    {
-        ...
-        public override void SetDefaultValues(ContentType contentType)
-        {
-            base.SetDefaultValues(contentType);
-            this.SmartCropEnabled = true;
-        }
-    }
 ```
 
 ## Basic usage:
