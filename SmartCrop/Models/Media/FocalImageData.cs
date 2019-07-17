@@ -10,14 +10,45 @@ namespace Forte.SmartCrop.Models.Media
     public abstract class FocalImageData : ImageData, IFocalPointData
     {
 
-        public virtual int FocalPointX { get; set; }
+        private int _focalPointX;
+        private int _focalPointY;
+        private FocalPoint _focalPoint;
 
-        public virtual int FocalPointY { get; set; }
+        public virtual int FocalPointX
+        {
+            get => _focalPointX;
+            set
+            {
+                _focalPointX = value;
+                if (_focalPoint == null) return;
+                if (OriginalWidth != null) _focalPoint.X = 100 * _focalPointX / (double) OriginalWidth;
+            }
+        }
+
+        public virtual int FocalPointY
+        {
+            get => _focalPointY;
+            set
+            {
+                _focalPointY = value;
+                if (_focalPoint == null) return;
+                if (OriginalHeight != null) _focalPoint.Y = 100 * _focalPointY / (double) OriginalHeight;
+            }
+        }
 
         public virtual bool SmartCropEnabled { get; set; }
 
         [BackingType(typeof(PropertyFocalPoint))]
-        public virtual FocalPoint FocalPoint { get; set; }
+        public virtual FocalPoint FocalPoint
+        {
+            get => _focalPoint;
+            set
+            {
+                _focalPoint = value;
+                if (OriginalWidth != null) _focalPointX = (int)((int) OriginalWidth * _focalPoint.X / 100);
+                if (OriginalHeight != null) _focalPointY = (int)((int) OriginalHeight * _focalPoint.Y / 100);
+            }
+        }
 
         [ScaffoldColumn(false)]
         public virtual int? OriginalWidth { get; set; }
