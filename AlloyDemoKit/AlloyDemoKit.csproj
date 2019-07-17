@@ -687,12 +687,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartCrop\SmartCrop.csproj">
-      <Project>{d7a760be-97a2-47eb-8ebd-958bfe8ee5c0}</Project>
-      <Name>SmartCrop</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="AddOns\Core\SearchAndReplace.aspx" />
     <Content Include="AddOns\Core\TimeMachine.aspx" />
     <Content Include="AdminTools\EmployeeSettings.aspx" />
@@ -1090,6 +1084,12 @@
     <Folder Include="ClientResources\Scripts\" />
     <Folder Include="Models\Register\" />
     <Folder Include="modules\_protected\EPiServer.Labs.LanguageManager\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartCrop\SmartCrop.csproj">
+      <Project>{d7a760be-97a2-47eb-8ebd-958bfe8ee5c0}</Project>
+      <Name>SmartCrop</Name>
+    </ProjectReference>
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

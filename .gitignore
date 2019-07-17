@@ -23,6 +23,7 @@ bld/
 [Ll]og/
 
 # This repo specific ignores
+Images/
 WeatherService/
 Presentation.pptx
 
@@ -216,8 +217,8 @@ UpgradeLog*.XML
 UpgradeLog*.htm
 
 # SQL Server files
-*.mdf
-*.ldf
+#*.mdf
+#*.ldf
 
 # Business Intelligence projects
 *.rdl.data
