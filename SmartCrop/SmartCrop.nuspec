@@ -19,5 +19,6 @@
   </metadata>
   <files>
         <file src="bin/Forte.SmartCrop.dll" target="lib\net462" />
+		<file src="Plugins/Index.cshtml" target="content\modules\_protected\Forte.SmartCrop"/>
   </files>
 </package>
