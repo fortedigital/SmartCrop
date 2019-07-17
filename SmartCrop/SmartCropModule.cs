@@ -14,6 +14,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Forte.SmartCrop.Models.Media;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
+using Microsoft.Rest.ClientRuntime;
 
 namespace Forte.SmartCrop
 {
