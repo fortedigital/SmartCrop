@@ -215,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Plugins\_Layout.cshtml" />
     <None Include="Plugins\Index.cshtml" />
     <None Include="packages.config" />
   </ItemGroup>
