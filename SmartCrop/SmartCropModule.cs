@@ -73,6 +73,8 @@ namespace Forte.SmartCrop
             var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
+            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return false;
+            
             var lastVersion = contentVersionRepository
                 .List(image.ContentLink)
                 .Where(p => p.Status == VersionStatus.PreviouslyPublished)
@@ -82,7 +84,6 @@ namespace Forte.SmartCrop
             if (lastVersion == null) return false;
 
             var lastImage = contentRepository.Get<FocalImageData>(lastVersion.ContentLink);
-
             return lastImage.FocalPoint != image.FocalPoint;
         }
 
