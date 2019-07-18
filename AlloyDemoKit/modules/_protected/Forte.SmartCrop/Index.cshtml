@@ -2,20 +2,42 @@
 @using System.Web.Mvc.Html
 @using EPiServer.Framework.Web.Resources
 @using System.Web
+@using EPiServer
+@using EPiServer.Shell
 
 @{
-    Layout = Url.Content("_Layout.cshtml");
+    Layout = null;
 }
 
-<p>
-    <h4>Enable/Disable SmartCrop for all images</h4>
-    Disabling SmartCrop will disable connection to Azure services<br />
-    and FocalPoint properties will be unset.<br /><br />
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+    <link href="@Paths.ToShellClientResource("ClientResources/epi/themes/legacy/ShellCore.css")" rel="stylesheet" type="text/css">
+    <link href="@Paths.ToShellClientResource("ClientResources/epi/themes/legacy/ShellCoreLightTheme.css")" rel="stylesheet" type="text/css">
+    <link href="@UriSupport.ResolveUrlFromUIBySettings("App_Themes/Default/Styles/system.css")">
+    <link href="@UriSupport.ResolveUrlFromUIBySettings("App_Themes/Default/Styles/ToolButton.css")">
+</head>
+<body id="body">
+    <div class="epi-contentContainer epi-padding">
+    <div class="epi-contentArea">
+        <h1 class="epi-prefix">Enable/Disable SmartCrop for all images</h1>
+        <div id="innerBody">
+            Disabling SmartCrop will disable connection to Azure services<br />
+            and FocalPoint properties will be unset.<br /><br />
 
-    @using (Html.BeginForm("Action", "SmartCropAdminPlugin"))
-    {
+            @using (Html.BeginForm("Action", "SmartCropAdminPlugin"))
+            {
 
-        <text>Enable SmartCrop:</text> @Html.CheckBox("IsSmartCropEnabled")<br />
-        <button>Update</button>
-    }
-</p>
+                <text>Enable SmartCrop:</text> @Html.CheckBox("IsSmartCropEnabled")<br /><br />
+                <div class="epi-buttonContainer">
+                    <span class="epi-cmsButton">
+                        <input id="btnSave" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" value="Save" type="submit">
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+    </div>
+</body>
+</html>
