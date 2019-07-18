@@ -267,3 +267,4 @@ __pycache__/
 *.pyc
 /Website/dist
 /Website/Features/**/*.csharp.ts
+AlloyDemoKit/App_Data/blobs/
