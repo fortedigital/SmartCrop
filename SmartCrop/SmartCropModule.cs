@@ -3,11 +3,13 @@ using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 using Forte.SmartCrop.Business;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
@@ -35,7 +37,7 @@ namespace Forte.SmartCrop
         {
             if (e.Content is FocalImageData imageFile)
             {
-                if (_settings.LoadSettings())
+                if (_settings.LoadSettings() && !WasEdited(imageFile))
                 {
                     using (var stream = ReadBlob(imageFile))
                     {
@@ -64,6 +66,24 @@ namespace Forte.SmartCrop
                 }
             }
 
+        }
+
+        private bool WasEdited(FocalImageData image)
+        {
+            var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+
+            var lastVersion = contentVersionRepository
+                .List(image.ContentLink)
+                .Where(p => p.Status == VersionStatus.PreviouslyPublished)
+                .OrderByDescending(p => p.Saved)
+                .FirstOrDefault();
+
+            if (lastVersion == null) return false;
+
+            var lastImage = contentRepository.Get<FocalImageData>(lastVersion.ContentLink);
+
+            return lastImage.FocalPoint != image.FocalPoint;
         }
 
         private static Image ResizeImage(Image originalImage, int maxSize)
