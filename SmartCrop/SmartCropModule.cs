@@ -53,12 +53,12 @@ namespace Forte.SmartCrop
                         var areaOfInterestWidth = (int) (boundingRect.W * scaleX);
                         var areaOfInterestHeight = (int) (boundingRect.H * scaleY);
 
-                        imageFile.FocalPointX = areaOfInterestX + areaOfInterestWidth / 2;
-                        imageFile.FocalPointY = areaOfInterestY + areaOfInterestHeight / 2;
+                        var middlePointX = areaOfInterestX + areaOfInterestWidth / 2;
+                        var middlePointY = areaOfInterestY + areaOfInterestHeight / 2;
                         imageFile.FocalPoint = new FocalPoint()
                         {
-                            X = 100 * imageFile.FocalPointX / (double) originalImage.Width,
-                            Y = 100 * imageFile.FocalPointY / (double) originalImage.Height
+                            X = 100 * middlePointX / (double) originalImage.Width,
+                            Y = 100 * middlePointY / (double) originalImage.Height
                         };
                     }
                 }

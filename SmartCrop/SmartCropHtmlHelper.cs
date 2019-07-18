@@ -82,8 +82,9 @@ namespace Forte.SmartCrop
 				{
 					var boundingRectHeight = originalImage.Height;
 					var boundingRectWidth = boundingRectHeight * cropRatio;
-                    
-					cropX = imageFile.FocalPointX - boundingRectWidth / 2;
+                    var middlePointX = imageFile.FocalPoint.X * originalImage.Width / 100;
+
+					cropX = middlePointX - boundingRectWidth / 2;
 					if (cropX < 0)
 						cropX = 0;
 
@@ -96,8 +97,9 @@ namespace Forte.SmartCrop
 				{
 					var boundingRectWidth = originalImage.Width;
 					var boundingRectHeight = boundingRectWidth / cropRatio;
-                    
-					cropY = imageFile.FocalPointY - boundingRectHeight / 2;
+                    var middlePointY = imageFile.FocalPoint.Y * originalImage.Height / 100;
+
+					cropY = middlePointY - boundingRectHeight / 2;
 					if (cropY < 0)
 						cropY = 0;
 

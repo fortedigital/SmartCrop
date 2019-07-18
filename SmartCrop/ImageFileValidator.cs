@@ -15,16 +15,14 @@ namespace Forte.SmartCrop
 
         public ImageFileValidator()
         {
-            ErrorMessage = "Focal Point properties not set." + 
-                           "Run scheduled job to update all images' properties or" +
+            ErrorMessage = "Focal Point properties not set. " + 
+                           "Run scheduled job to update all images' properties or " +
                            "check your API key and server availability to Cognitive Services.";
         }
 
         public IEnumerable<ValidationError> Validate(FocalImageData image)
         {
             if (image.SmartCropEnabled
-                && image.FocalPointX == 0
-                && image.FocalPointY == 0
                 && image.FocalPoint == null)
             {
                 return new ValidationError[]
