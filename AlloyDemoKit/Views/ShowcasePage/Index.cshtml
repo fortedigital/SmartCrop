@@ -32,36 +32,36 @@ Model.CurrentPage.ImageSmallHeight, Model.CurrentPage.ImageSmallBoth
         {
             <h1>@wh.Item1 x @wh.Item2</h1>
             <h2>With SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, true, wh.Item1, wh.Item2)<br /><br />
+            @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2)<br /><br />
             <h2>Without SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, false, wh.Item1, wh.Item2)<br /><br />
+            @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2)<br /><br />
             <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, true, wh.Item1, wh.Item2, true)<br /><br />
+            @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2, true)<br /><br />
             <h2>With SmartCrop & No ZoomOut</h2>
-            @Html.FocusedImage(elem.Item2, true, wh.Item1, wh.Item2, noZoomOut: true)<br /><br />
+            @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2, noZoomOut: true)<br /><br />
         }
 
         foreach (var s in ws.Distinct())
         {
             <h1>@s x ?</h1>
             <h2>With SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, true, s)<br /><br />
+            @Html.FocusedImage(elem.Item2, s)<br /><br />
             <h2>Without SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, false, s)<br /><br />
+            @Html.FocusedImage(elem.Item2, s)<br /><br />
             <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, true, s, forceSize: true)<br /><br />
+            @Html.FocusedImage(elem.Item2, s, forceSize: true)<br /><br />
             <h2>With SmartCrop & No ZoomOut</h2>
-            @Html.FocusedImage(elem.Item2, true, s, noZoomOut: true)<br /><br />
+            @Html.FocusedImage(elem.Item2, s, noZoomOut: true)<br /><br />
 
             <h1>? x @s</h1>
             <h2>With SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, true, height: s)<br /><br />
+            @Html.FocusedImage(elem.Item2, height: s)<br /><br />
             <h2>Without SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, false, height: s)<br /><br />
+            @Html.FocusedImage(elem.Item2, height: s)<br /><br />
             <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, true, height: s, forceSize: true)<br /><br />
+            @Html.FocusedImage(elem.Item2, height: s, forceSize: true)<br /><br />
             <h2>With SmartCrop & No ZoomOut</h2>
-            @Html.FocusedImage(elem.Item2, true, height: s, noZoomOut: true)<br /><br />
+            @Html.FocusedImage(elem.Item2, height: s, noZoomOut: true)<br /><br />
         }
         <br /><br /><br />
 

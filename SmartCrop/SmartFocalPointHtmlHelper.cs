@@ -16,11 +16,10 @@ namespace Forte.SmartFocalPoint
 {
     public static class SmartFocalPointHtmlHelper
     {
-        //TODO?: smartCrop and forcedSize not always centered on focalpoint?
+        //TODO?: when in smartFocalpoint and forcedSize not always centered on focalpoint?
         public static MvcHtmlString FocusedImage(
             this HtmlHelper helper,
             ContentReference image,
-            bool smart,
             int? width = null,
             int? height = null,
             bool forceSize = false,
@@ -40,8 +39,7 @@ namespace Forte.SmartFocalPoint
             }
 
             var parameters = new List<string>();
-            //var hasSmartCrop = imageFile.SmartFocalPointEnabled;
-            var hasSmartCrop = smart;
+            var hasSmartFocalPoint = imageFile.SmartFocalPointEnabled;
 
             var maxWidth = imageFile.OriginalWidth.Value;
             var maxHeight = imageFile.OriginalHeight.Value;
@@ -62,14 +60,14 @@ namespace Forte.SmartFocalPoint
                 if (width != null)
                 {
                     parameters.Add(
-                        hasSmartCrop ? "w=" + width : "width=" + width
+                        hasSmartFocalPoint ? "w=" + width : "width=" + width
                     );
                 }
 
                 if (height != null)
                 {
                     parameters.Add(
-                        hasSmartCrop ? "h=" + height : "height=" + height
+                        hasSmartFocalPoint ? "h=" + height : "height=" + height
                     );
                 }
             }
@@ -77,7 +75,7 @@ namespace Forte.SmartFocalPoint
             parameters.Add("mode=crop");
 
             //forcing size wont do anything with width and height parameters
-            if (forceSize && hasSmartCrop)
+            if (forceSize && hasSmartFocalPoint)
             {
                 parameters.Add("scale=both");
             }
