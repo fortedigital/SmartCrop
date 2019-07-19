@@ -6,7 +6,7 @@ namespace Forte.SmartFocalPoint.Models.ViewModels
 {
     public class SmartFocalPointAdminPluginViewModel
     {
-        public bool IsSmartCropEnabled { get; set; }
+        public bool IsSmartFocalPointEnabled { get; set; }
 
     }
 }

@@ -10,7 +10,7 @@ namespace Forte.SmartFocalPoint.Models.Media
     public abstract class FocalImageData : ImageData, IFocalPointData
     {
         
-        public virtual bool SmartCropEnabled { get; set; }
+        public virtual bool SmartFocalPointEnabled { get; set; }
 
         [BackingType(typeof(PropertyFocalPoint))]
         public virtual FocalPoint FocalPoint { get; set; }
@@ -24,7 +24,7 @@ namespace Forte.SmartFocalPoint.Models.Media
         public override void SetDefaultValues(ContentType contentType)
         {
             base.SetDefaultValues(contentType);
-            this.SmartCropEnabled = true;
+            this.SmartFocalPointEnabled = true;
         }
     }
 }

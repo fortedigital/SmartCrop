@@ -40,7 +40,7 @@ namespace Forte.SmartFocalPoint
             }
 
             var parameters = new List<string>();
-            //var hasSmartCrop = imageFile.SmartCropEnabled;
+            //var hasSmartCrop = imageFile.SmartFocalPointEnabled;
             var hasSmartCrop = smart;
 
             var maxWidth = imageFile.OriginalWidth.Value;

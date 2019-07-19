@@ -22,7 +22,7 @@ namespace Forte.SmartFocalPoint
 
         public IEnumerable<ValidationError> Validate(FocalImageData image)
         {
-            if (image.SmartCropEnabled
+            if (image.SmartFocalPointEnabled
                 && image.FocalPoint == null)
             {
                 return new ValidationError[]

@@ -26,7 +26,7 @@ namespace Forte.SmartFocalPoint.Business
         public ActionResult Index()
         {
 
-            var model = new SmartFocalPointAdminPluginViewModel {IsSmartCropEnabled = GetSmartFocalPointSetting()};
+            var model = new SmartFocalPointAdminPluginViewModel {IsSmartFocalPointEnabled = GetSmartFocalPointSetting()};
 
             return View("~/modules/_protected/Forte.SmartFocalPoint/Index.cshtml", model);
         }
@@ -34,7 +34,7 @@ namespace Forte.SmartFocalPoint.Business
         [HttpPost]
         public ActionResult Action(SmartFocalPointAdminPluginViewModel model)
         {
-            _settings.SaveSettings(model.IsSmartCropEnabled);
+            _settings.SaveSettings(model.IsSmartFocalPointEnabled);
             return View("~/modules/_protected/Forte.SmartFocalPoint/Index.cshtml", model);
         }
 
