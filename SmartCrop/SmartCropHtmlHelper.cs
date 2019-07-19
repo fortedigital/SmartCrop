@@ -16,7 +16,7 @@ namespace Forte.SmartCrop
 {
     public static class SmartCropHtmlHelper
     {
-
+        //TODO?: smartCrop and forcedSize not always centered on focalpoint?
         public static MvcHtmlString FocusedImage(
             this HtmlHelper helper,
             ContentReference image,
