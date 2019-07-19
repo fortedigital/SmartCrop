@@ -70,8 +70,10 @@ namespace Forte.SmartCrop
         public static MvcHtmlString MyCropper(
             this HtmlHelper helper,
             ContentReference image,
-            int? width,
-            int? height)
+            bool smart,
+            int? width = null,
+            int? height = null,
+            bool forceSize = false)
         {
             if (ContentReference.IsNullOrEmpty(image))
             {
@@ -81,21 +83,35 @@ namespace Forte.SmartCrop
             string imageBaseUrl = ResolveImageUrl(image);
             ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out FocalImageData imageFile);
             var parameters = new List<string>();
+            //var hasSmartCrop = imageFile.SmartCropEnabled;
+            var hasSmartCrop = smart;
+
+            //forcing size doesnt make sense if image is big enough
+            forceSize = forceSize && (width > imageFile.OriginalWidth || height > imageFile.OriginalHeight);
+
+            //TODO: crop here
 
             if (width != null)
             {
                 parameters.Add(
-                    imageFile.SmartCropEnabled ? "w=" + width : "width=" + width
+                    hasSmartCrop ? "w=" + width : "width=" + width
                     );
             }
             if (height != null)
             {
                 parameters.Add(
-                    imageFile.SmartCropEnabled ? "h=" + height : "height=" + height
+                    hasSmartCrop ? "h=" + height : "height=" + height
                 );
             }
             
             parameters.Add("mode=crop");
+
+            //forcing size wont do anything with width and height parameters
+            if (forceSize && hasSmartCrop)
+            {
+                parameters.Add("scale=both");
+            }
+
             var separator = imageBaseUrl.Contains("?") ? "&" : "?";
             var imageUrl = imageBaseUrl + separator + string.Join("&", parameters);
 

@@ -652,6 +652,7 @@
     <Compile Include="Models\Pages\ProductPage.cs" />
     <Compile Include="Models\Pages\ProfilePage.cs" />
     <Compile Include="Models\Pages\SearchPage.cs" />
+    <Compile Include="Models\Pages\ShowcasePage.cs" />
     <Compile Include="Models\Pages\SitePageData.cs" />
     <Compile Include="Models\Pages\StandardPage.cs" />
     <Compile Include="Models\Pages\StartPage.cs" />
@@ -1067,6 +1068,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\ShowcasePage\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

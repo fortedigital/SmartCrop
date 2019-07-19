@@ -1,0 +1,71 @@
+@using AlloyDemoKit
+@using EPiServer.Core
+@using EPiServer.Web.Routing
+@using Forte.SmartCrop
+@using ImageResizer
+@using ImageResizer.Plugins.EPiServer
+@model PageViewModel<ShowcasePage>
+
+@{ Layout = "~/Views/Shared/Layouts/_LeftNavigation.cshtml"; }
+
+<h1 @Html.EditAttributes(x => x.CurrentPage.PageName)>@Model.CurrentPage.PageName</h1>
+<p class="introduction" @Html.EditAttributes(x => x.CurrentPage.MetaDescription)>@Model.CurrentPage.MetaDescription</p>
+
+@{
+
+    var ims = new List<string> { "Bigger on w & h", "Smaller w", "Smaller h", "Smaller on w& h" };
+    var refs = new List<ContentReference>
+{
+Model.CurrentPage.ImageHuge, Model.CurrentPage.ImageSmallWidth,
+Model.CurrentPage.ImageSmallHeight, Model.CurrentPage.ImageSmallBoth
+};
+    var ws = new List<int> { 300, 600, 300, 600, 200 };
+    var hs = new List<int> { 300, 300, 600, 200, 600 };
+
+    foreach (var elem in ims.Zip(refs, Tuple.Create))
+    {
+        <h1>Original - @elem.Item1</h1>
+        <img src=@UrlResolver.Current.GetUrl(elem.Item2)><br />
+        <br /><br /><br />
+
+        foreach (var wh in ws.Zip(hs, Tuple.Create))
+        {
+            <h1>@wh.Item1 x @wh.Item2</h1>
+            <h2>With SmartCrop</h2>
+            @Html.MyCropper(elem.Item2, true, wh.Item1, wh.Item2)<br /><br />
+            <h2>Without SmartCrop</h2>
+            @Html.MyCropper(elem.Item2, false, wh.Item1, wh.Item2)<br /><br />
+            <h2>With SmartCrop & Forced Size</h2>
+            @Html.MyCropper(elem.Item2, true, wh.Item1, wh.Item2, true)<br /><br />
+        }
+
+        foreach (var s in ws.Distinct())
+        {
+            <h1>@s x ?</h1>
+            <h2>With SmartCrop</h2>
+            @Html.MyCropper(elem.Item2, true, s)<br /><br />
+            <h2>Without SmartCrop</h2>
+            @Html.MyCropper(elem.Item2, false, s)<br /><br />
+            <h2>With SmartCrop & Forced Size</h2>
+            @Html.MyCropper(elem.Item2, true, s, forceSize: true)<br /><br />
+
+            <h1>? x @s</h1>
+            <h2>With SmartCrop</h2>
+            @Html.MyCropper(elem.Item2, true, height: s)<br /><br />
+            <h2>Without SmartCrop</h2>
+            @Html.MyCropper(elem.Item2, false, height: s)<br /><br />
+            <h2>With SmartCrop & Forced Size</h2>
+            @Html.MyCropper(elem.Item2, true, height: s, forceSize: true)<br /><br />
+        }
+        <br /><br /><br />
+
+    }
+}
+
+
+<div class="row">
+    <div class="span8 clearfix" @Html.EditAttributes(x => x.CurrentPage.MainBody)>
+        @Html.DisplayFor(m => m.CurrentPage.MainBody)
+    </div>
+</div>
+@Html.PropertyFor(x => x.CurrentPage.MainContentArea, new { CssClass = "row", Tag = Global.ContentAreaTags.TwoThirdsWidth })
