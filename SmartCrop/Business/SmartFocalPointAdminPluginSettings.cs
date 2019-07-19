@@ -3,15 +3,15 @@ using System.Data;
 using EPiServer.Logging;
 using EPiServer.PlugIn;
 
-namespace Forte.SmartCrop.Business
+namespace Forte.SmartFocalPoint.Business
 {
-    public class SmartCropAdminPluginSettings
+    public class SmartFocalPointAdminPluginSettings
     {
         private DataSet customDataSet;
         private const string Key = "SmartCrop";
         private static readonly ILogger Logger = LogManager.GetLogger();
 
-        public SmartCropAdminPluginSettings()
+        public SmartFocalPointAdminPluginSettings()
         {
             customDataSet = new DataSet();
             customDataSet.Tables.Add(new DataTable());
@@ -24,7 +24,7 @@ namespace Forte.SmartCrop.Business
             var returnVal = string.Empty;
             try
             {
-                PlugInSettings.Populate(typeof(SmartCropAdminPluginSettings), customDataSet);
+                PlugInSettings.Populate(typeof(SmartFocalPointAdminPluginSettings), customDataSet);
                 returnVal = customDataSet.Tables[0].Rows[0][Key].ToString();
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace Forte.SmartCrop.Business
                 var newRow = customDataSet.Tables[0].NewRow();
                 newRow[Key] = value.ToString();
                 customDataSet.Tables[0].Rows.Add(newRow);
-                PlugInSettings.Save(typeof(SmartCropAdminPluginSettings), customDataSet);
+                PlugInSettings.Save(typeof(SmartFocalPointAdminPluginSettings), customDataSet);
             }
             catch (Exception ex)
             {

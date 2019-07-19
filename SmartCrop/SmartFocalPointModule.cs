@@ -11,22 +11,22 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
-using Forte.SmartCrop.Business;
+using Forte.SmartFocalPoint.Business;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
-using Forte.SmartCrop.Models.Media;
+using Forte.SmartFocalPoint.Models.Media;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 using Microsoft.Rest.ClientRuntime;
 
-namespace Forte.SmartCrop
+namespace Forte.SmartFocalPoint
 {
     [ModuleDependency(typeof(ShellInitialization))]
     [InitializableModule]
-    public class SmartCropModule : IInitializableModule
+    public class SmartFocalPointModule : IInitializableModule
     {
 	    private const int MaxSize = 1024;
         private static readonly ILogger Logger = LogManager.GetLogger();
-        private SmartCropAdminPluginSettings _settings = new SmartCropAdminPluginSettings();
+        private SmartFocalPointAdminPluginSettings _settings = new SmartFocalPointAdminPluginSettings();
 
 		public void Initialize(InitializationEngine context)
         {

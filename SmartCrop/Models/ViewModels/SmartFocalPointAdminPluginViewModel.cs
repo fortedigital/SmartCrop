@@ -2,9 +2,9 @@
 using System.Linq;
 using EPiServer.Core;
 
-namespace Forte.SmartCrop.Models.ViewModels
+namespace Forte.SmartFocalPoint.Models.ViewModels
 {
-    public class SmartCropAdminPluginViewModel
+    public class SmartFocalPointAdminPluginViewModel
     {
         public bool IsSmartCropEnabled { get; set; }
 

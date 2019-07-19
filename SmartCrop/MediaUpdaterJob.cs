@@ -7,10 +7,10 @@ using EPiServer.PlugIn;
 using EPiServer.Scheduler;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
-using Forte.SmartCrop.Models.Media;
+using Forte.SmartFocalPoint.Models.Media;
 using SiteDefinition = EPiServer.Web.SiteDefinition;
 
-namespace Forte.SmartCrop
+namespace Forte.SmartFocalPoint
 {
     
     public class MediaUpdaterJob : ScheduledJobBase

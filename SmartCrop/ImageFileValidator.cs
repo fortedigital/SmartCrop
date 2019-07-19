@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using EPiServer.Core;
 using EPiServer.Validation;
-using Forte.SmartCrop.Models.Media;
+using Forte.SmartFocalPoint.Models.Media;
 
-namespace Forte.SmartCrop
+namespace Forte.SmartFocalPoint
 {
     public class ImageFileValidator : IValidate<FocalImageData>
     {

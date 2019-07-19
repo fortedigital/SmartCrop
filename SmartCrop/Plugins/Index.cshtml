@@ -1,4 +1,4 @@
-﻿@inherits System.Web.Mvc.WebViewPage<Forte.SmartCrop.Models.ViewModels.SmartCropAdminPluginViewModel>
+﻿@inherits System.Web.Mvc.WebViewPage<Forte.SmartFocalPoint.Models.ViewModels.SmartFocalPointAdminPluginViewModel>
 @using System.Web.Mvc.Html
 @using EPiServer.Framework.Web.Resources
 @using System.Web
@@ -21,15 +21,15 @@
 <body id="body">
     <div class="epi-contentContainer epi-padding">
     <div class="epi-contentArea">
-        <h1 class="epi-prefix">Enable/Disable SmartCrop for all images</h1>
+        <h1 class="epi-prefix">Enable/Disable SmartFocalPoint connection for all images</h1>
         <div id="innerBody">
-            Disabling SmartCrop will disable connection to Azure services<br />
-            and FocalPoint properties will be unset.<br /><br />
+            Disabling this will disable connection to Azure services<br />
+            and unset FocalPoint properties will remain unset.<br /><br />
 
-            @using (Html.BeginForm("Action", "SmartCropAdminPlugin"))
+            @using (Html.BeginForm("Action", "SmartFocalPointAdminPlugin"))
             {
 
-                <text>Enable SmartCrop:</text> @Html.CheckBox("IsSmartCropEnabled")<br /><br />
+                <text>Enable connection:</text> @Html.CheckBox("IsSmartCropEnabled")<br /><br />
                 <div class="epi-buttonContainer">
                     <span class="epi-cmsButton">
                         <input id="btnSave" class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" value="Save" type="submit">

@@ -5,16 +5,16 @@ using System.IO;
 using System.Net.Configuration;
 using System.Runtime.CompilerServices;
 using System.Web.Mvc;
-using Forte.SmartCrop.Models.Media;
+using Forte.SmartFocalPoint.Models.Media;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using ImageResizer;
 
-namespace Forte.SmartCrop
+namespace Forte.SmartFocalPoint
 {
-    public static class SmartCropHtmlHelper
+    public static class SmartFocalPointHtmlHelper
     {
         //TODO?: smartCrop and forcedSize not always centered on focalpoint?
         public static MvcHtmlString FocusedImage(

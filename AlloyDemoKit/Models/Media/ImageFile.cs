@@ -3,7 +3,7 @@ using EPiServer.Core;
 using EPiServer.DataAnnotations;
 using EPiServer.Framework.DataAnnotations;
 using EPiServer.DataAbstraction;
-using Forte.SmartCrop.Models.Media;
+using Forte.SmartFocalPoint.Models.Media;
 
 namespace AlloyDemoKit.Models.Media
 {

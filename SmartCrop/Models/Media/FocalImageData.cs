@@ -5,7 +5,7 @@ using EPiServer.DataAnnotations;
 using ImageResizer.Plugins.EPiFocalPoint;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 
-namespace Forte.SmartCrop.Models.Media
+namespace Forte.SmartFocalPoint.Models.Media
 {
     public abstract class FocalImageData : ImageData, IFocalPointData
     {

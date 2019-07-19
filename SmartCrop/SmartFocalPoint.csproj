@@ -7,8 +7,8 @@
     <ProjectGuid>{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Forte.SmartCrop</RootNamespace>
-    <AssemblyName>Forte.SmartCrop</AssemblyName>
+    <RootNamespace>Forte.SmartFocalPoint</RootNamespace>
+    <AssemblyName>Forte.SmartFocalPoint</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
@@ -200,15 +200,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\CustomRouteInitializer.cs" />
-    <Compile Include="Business\SmartCropAdminPluginController.cs" />
-    <Compile Include="Business\SmartCropAdminPluginSettings.cs" />
+    <Compile Include="Business\SmartFocalPointAdminPluginController.cs" />
+    <Compile Include="Business\SmartFocalPointAdminPluginSettings.cs" />
     <Compile Include="ImageFileValidator.cs" />
     <Compile Include="MediaUpdaterJob.cs" />
     <Compile Include="Models\Media\FocalImageData.cs" />
-    <Compile Include="Models\ViewModels\SmartCropAdminPluginViewModel.cs" />
+    <Compile Include="Models\ViewModels\SmartFocalPointAdminPluginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmartCropHtmlHelper.cs" />
-    <Compile Include="SmartCropModule.cs" />
+    <Compile Include="SmartFocalPointHtmlHelper.cs" />
+    <Compile Include="SmartFocalPointModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
