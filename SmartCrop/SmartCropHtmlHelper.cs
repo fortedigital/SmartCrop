@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Net.Configuration;
 using System.Runtime.CompilerServices;
 using System.Web.Mvc;
 using Forte.SmartCrop.Models.Media;
@@ -73,7 +74,8 @@ namespace Forte.SmartCrop
             bool smart,
             int? width = null,
             int? height = null,
-            bool forceSize = false)
+            bool forceSize = false,
+            bool noZoomOut = false)
         {
             if (ContentReference.IsNullOrEmpty(image))
             {
@@ -86,24 +88,36 @@ namespace Forte.SmartCrop
             //var hasSmartCrop = imageFile.SmartCropEnabled;
             var hasSmartCrop = smart;
 
+            var maxWidth = imageFile.OriginalWidth;
+            var maxHeight = imageFile.OriginalHeight;
             //forcing size doesnt make sense if image is big enough
-            forceSize = forceSize && (width > imageFile.OriginalWidth || height > imageFile.OriginalHeight);
+            forceSize = forceSize && (width > maxWidth || height > maxHeight);
 
-            //TODO: crop here
-
-            if (width != null)
+            if (noZoomOut && 
+                (width == null || width <= maxWidth) &&
+                (height == null || height <= maxHeight))
             {
-                parameters.Add(
-                    hasSmartCrop ? "w=" + width : "width=" + width
+                parameters.Add("crop="+ CalculateCrop(imageFile, 
+                                   width ?? maxWidth, 
+                                   height ?? maxHeight));
+            }
+            else
+            {
+                if (width != null)
+                {
+                    parameters.Add(
+                        hasSmartCrop ? "w=" + width : "width=" + width
                     );
+                }
+
+                if (height != null)
+                {
+                    parameters.Add(
+                        hasSmartCrop ? "h=" + height : "height=" + height
+                    );
+                }
             }
-            if (height != null)
-            {
-                parameters.Add(
-                    hasSmartCrop ? "h=" + height : "height=" + height
-                );
-            }
-            
+
             parameters.Add("mode=crop");
 
             //forcing size wont do anything with width and height parameters
@@ -119,6 +133,18 @@ namespace Forte.SmartCrop
             tagBuilder.Attributes.Add("src", imageUrl);
             return new MvcHtmlString(tagBuilder.ToString());
         }
+
+        private static string CalculateCrop(FocalImageData image, int? width, int? height)
+        {
+            if (width == null || height == null)
+            {
+
+            }
+
+            int X1 =0, X2=0, Y1=0, Y2=0;
+            return $"({X1},{Y1},{X2},{Y2})";
+        }
+
 
         private static string CalculateCropBounds(FocalImageData imageFile, int width, int height)
         {
