@@ -251,7 +251,7 @@ namespace Forte.SmartFocalPoint
 
 
 
-    public class SmartCropCalculator
+    public class SmartFocalPointCalculator
     {
         public RectangleF CalculateCrop(SizeF imageSize, RectangleF areaOfInterests, SizeF cropSize)
         {

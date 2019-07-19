@@ -1,4 +1,4 @@
-# Content-aware image cropping for EPiServer using Azure Cognitive Services
+# Content-aware automation for Episerver's EPiFocalPoint plugin using Azure Cognitive Services
 
 ## Basic installation:
 
@@ -24,10 +24,10 @@ public class ImageFile : FocalImageData
 
 ## Basic usage:
 
-Use ImageResize HtmlHelper extension ResizeImage with Crop mode
+Use HtmlHelper extension FocusedImage
 
 Example:
 
 ```html
-<img src="@Html.ResizeImage(Model.CurrentPage.Image, 300, 600).FitMode(FitMode.Crop)" /> <br /><br />
+@Html.FocusedImage(image, width, height, forceSize, noZoomout)
 ```

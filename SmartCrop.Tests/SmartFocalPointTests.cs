@@ -1,9 +1,8 @@
 ﻿using System.Drawing;
-using Forte.SmartCrop;
+using Forte.SmartFocalPoint;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SmartCrop;
 
-namespace SmartCrop.Tests
+namespace Forte.SmartFocalPoint.Tests
 {
     [TestClass]
     public class SmartCropTests
@@ -11,7 +10,7 @@ namespace SmartCrop.Tests
         [TestMethod]
         public void CropLeftWithoutResize()
         {
-            SmartCropCalculator calculator = new SmartCropCalculator();
+            SmartFocalPointCalculator calculator = new SmartFocalPointCalculator();
             var crop = calculator.CalculateCrop(new Size(100, 50), new Rectangle(0, 0, 50, 50), new Size(50, 50));
 
             Assert.AreEqual(new Rectangle(0,0,50,50), crop);
@@ -20,7 +19,7 @@ namespace SmartCrop.Tests
         [TestMethod]
         public void CropBottom()
         {
-            SmartCropCalculator calculator = new SmartCropCalculator();
+            SmartFocalPointCalculator calculator = new SmartFocalPointCalculator();
             var crop = calculator.CalculateCrop(new Size(50, 100), new Rectangle(0, 50, 50, 50), new Size(50, 50));
 
             Assert.AreEqual( new Rectangle(0, 50, 50, 50), crop);
