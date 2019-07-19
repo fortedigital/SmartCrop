@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Web.Mvc;
 using Forte.SmartCrop.Models.Media;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using ImageResizer;
 
 namespace Forte.SmartCrop
 {
@@ -35,18 +37,17 @@ namespace Forte.SmartCrop
             {
                 parameters.Add("crop=" + CalculateCropBounds(imageFile, width.Value, height.Value));
             }
-            else
+            if (width != null)
             {
-                if (width != null)
-                {
-                    parameters.Add("width=" + width.ToString());
-                }
-
-                if (height != null)
-                {
-                    parameters.Add("height=" + height.ToString());
-                }
+                parameters.Add("width=" + width.ToString());
             }
+
+            if (height != null)
+            {
+                parameters.Add("height=" + height.ToString());
+            }
+
+            
 
             if (isCrop)
             {
@@ -64,6 +65,43 @@ namespace Forte.SmartCrop
 
             return new MvcHtmlString(tagBuilder.ToString());
 
+        }
+
+        public static MvcHtmlString MyCropper(
+            this HtmlHelper helper,
+            ContentReference image,
+            int? width,
+            int? height)
+        {
+            if (ContentReference.IsNullOrEmpty(image))
+            {
+                return MvcHtmlString.Empty;
+            }
+
+            string imageBaseUrl = ResolveImageUrl(image);
+            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out FocalImageData imageFile);
+            var parameters = new List<string>();
+
+            if (width != null)
+            {
+                parameters.Add(
+                    imageFile.SmartCropEnabled ? "w=" + width : "width=" + width
+                    );
+            }
+            if (height != null)
+            {
+                parameters.Add(
+                    imageFile.SmartCropEnabled ? "h=" + height : "height=" + height
+                );
+            }
+            
+            parameters.Add("mode=crop");
+            var separator = imageBaseUrl.Contains("?") ? "&" : "?";
+            var imageUrl = imageBaseUrl + separator + string.Join("&", parameters);
+
+            TagBuilder tagBuilder = new TagBuilder("img");
+            tagBuilder.Attributes.Add("src", imageUrl);
+            return new MvcHtmlString(tagBuilder.ToString());
         }
 
         private static string CalculateCropBounds(FocalImageData imageFile, int width, int height)
@@ -91,7 +129,7 @@ namespace Forte.SmartCrop
 					if (cropX + boundingRectWidth > originalImage.Width)
 						cropX = originalImage.Width - boundingRectWidth;
 
-                    cropQuery = $"{cropX},{cropY},{boundingRectWidth},{boundingRectHeight}";
+                    cropQuery = $"{cropX},{cropY},{cropX+boundingRectWidth},{cropY+boundingRectHeight}";
 				}
 				else
 				{
@@ -106,11 +144,11 @@ namespace Forte.SmartCrop
 					if (cropY + boundingRectHeight > originalImage.Height)
 						cropY = originalImage.Height - boundingRectHeight;
 
-                    cropQuery = $"{cropX},{cropY},{boundingRectWidth},{boundingRectHeight}";
+                    cropQuery = $"{cropX},{cropY},{cropX+boundingRectWidth},{cropY+boundingRectHeight}";
 				}
 
-                cropQuery += cropX < width ? $"&width={width + cropX}" : $"&width={width}";
-                cropQuery += cropY < height ? $"&height={height + cropY}" : $"&height={height}";
+                //cropQuery += cropX < width ? $"&width={width + cropX}" : $"&width={width}";
+                //cropQuery += cropY < height ? $"&height={height + cropY}" : $"&height={height}";
                 
                 return cropQuery;
 	        }
