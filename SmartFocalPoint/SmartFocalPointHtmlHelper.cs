@@ -251,50 +251,50 @@ namespace Forte.SmartFocalPoint
 		        return memoryStream;
 	        }
         }
+
+        
 	}
-
-
 
     public class SmartFocalPointCalculator
     {
-        public RectangleF CalculateCrop(SizeF imageSize, RectangleF areaOfInterests, SizeF cropSize)
+        public static string CalculateCrop(double X, double Y, int? originalWidth, int? originalHeight, int width, int height)
         {
-            double cropRatio = cropSize.Width / (double)cropSize.Height;
-            double originalRatio = imageSize.Width / (double)imageSize.Height;
-            
-            var cropX = 0.0;
-            var cropY = 0.0;
-            var boundingRectHeight = 0.0;
-            var boundingRectWidth = 0.0;
-            if (cropRatio < originalRatio)
+            var middleX = X * originalWidth / 100;
+            var middleY = Y * originalHeight / 100;
+
+            var X1 = middleX - width / 2;
+            var X2 = middleX + width / 2;
+            var Y1 = middleY - height / 2;
+            var Y2 = middleY + height / 2;
+
+            if (X1 < 0.0)
             {
-                boundingRectHeight = imageSize.Height;
-                boundingRectWidth = boundingRectHeight * cropRatio;
-
-                var xFocalPoint = areaOfInterests.Width / 2 + areaOfInterests.X;
-                cropX = xFocalPoint - boundingRectWidth / 2;
-                if (cropX < 0)
-                    cropX = 0;
-
-                if (cropX + boundingRectWidth > imageSize.Width)
-                    cropX = imageSize.Width - boundingRectWidth;
+                var offset = 0.0 - X1;
+                X1 = 0.0;
+                X2 += offset;
             }
-            else
+            if (X2 > originalWidth)
             {
-                boundingRectWidth = imageSize.Width;
-                boundingRectHeight = boundingRectWidth / cropRatio;
-
-                var yFocalPoint = areaOfInterests.Height / 2 + areaOfInterests.Y;
-                cropY = yFocalPoint - boundingRectHeight / 2;
-                if (cropY < 0)
-                    cropY = 0;
-
-                if (cropY + boundingRectHeight > imageSize.Height)
-                    cropY = imageSize.Height - boundingRectHeight;
+                var offset = X2 - originalWidth;
+                X1 -= offset;
+                X2 = originalWidth;
             }
-            return new RectangleF((float)cropX, (float)cropY, (float)boundingRectWidth, (float)boundingRectHeight);
+            if (Y1 < 0.0)
+            {
+                var offset = 0.0 - Y1;
+                Y1 = 0.0;
+                Y2 += offset;
+            }
+            if (Y2 > originalHeight)
+            {
+                var offset = Y2 - originalHeight;
+                Y1 -= offset;
+                Y2 = originalHeight;
+            }
+
+            return $"({X1},{Y1},{X2},{Y2})";
         }
-
     }
+
 }
 
