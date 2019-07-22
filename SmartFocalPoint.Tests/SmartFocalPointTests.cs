@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Forte.SmartFocalPoint.Tests
 {
     [TestClass]
-    public class SmartCropTests
+    public class SmartFocalPointTests
     {
         [TestMethod]
         public void CropLeftWithoutResize()
