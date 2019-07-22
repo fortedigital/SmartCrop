@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Forte.SmartCrop</id>
+    <id>Forte.SmartFocalPoint</id>
     <version>1.0.0</version>
-    <title>Forte.SmartCrop</title>
+    <title>Forte.SmartFocalPoint</title>
     <authors>Forte_ Digital</authors>
-    <projectUrl>https://github.com/fortedigital/SmartCrop</projectUrl>
+    <projectUrl>https://github.com/fortedigital/SmartFocalPoint</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Content-aware image cropping tool for EPiServer using Azure Cognitive Services</description>
     <copyright>Copyright 2019</copyright>
@@ -18,7 +18,7 @@
     </dependencies>
   </metadata>
   <files>
-        <file src="bin/Forte.SmartCrop.dll" target="lib\net462" />
-		<file src="Plugins/Index.cshtml" target="content\modules\_protected\Forte.SmartCrop"/>
+        <file src="bin/Forte.SmartFocalPoint.dll" target="lib\net462" />
+		<file src="Plugins/Index.cshtml" target="content\modules\_protected\Forte.SmartFocalPoint"/>
   </files>
 </package>
