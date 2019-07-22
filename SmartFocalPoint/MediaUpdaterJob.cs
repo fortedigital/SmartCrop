@@ -53,8 +53,6 @@ namespace Forte.SmartFocalPoint
 
         private string UpdateImages(ContentReference reference)
         {
-            //var childrenFolders = _contentRepository.GetChildren<ContentFolder>(reference);
-            //var images = _contentLoader.GetChildren<ImageData>(reference);
             var imagesEnumerable = _contentRepository.GetDescendents(reference)
                 .Where(r => _contentRepository.Get<IContent>(r) is ImageData)
                 .Select(_contentRepository.Get<ImageData>);
@@ -80,11 +78,6 @@ namespace Forte.SmartFocalPoint
                 {
                     return "Stop of job was called.\r\n" + GetStatusMessage(updatedCount, imagesCount, skippedImages);
                 }
-
-                //foreach (var folder in childrenFolders)
-                //{
-                //    UpdateImages(folder.ContentLink);
-                //}
                 
             }
             return "Image files' properties updated.\r\n" + GetStatusMessage(updatedCount, imagesCount, skippedImages);
