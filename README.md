@@ -26,8 +26,16 @@ public class ImageFile : FocalImageData
 
 Use HtmlHelper extension FocusedImage
 
+Parameters:
+
+- image - ContentReference to ImageFile property
+- width - Desired width of cropped image
+- height - Desired height of cropped image
+- forceSize - Always make output thumbnail to be in desired size. This flag  takes action only if original width/height is smaller than desired size
+- noZoomout - Normally ImageResizer zooms out huge images to preserve as much content as possible. Use this flag to stop this behaviour
+
 Example:
 
 ```html
-@Html.FocusedImage(image, width, height, forceSize, noZoomout)
+@Html.FocusedImage(Model.Image, 300, 300, forceSize: true, noZoomout: true)
 ```
