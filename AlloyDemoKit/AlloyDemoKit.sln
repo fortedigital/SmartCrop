@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlloyDemoKit", "AlloyDemoKit.csproj", "{6FA51284-08EC-4032-AF77-D6F2ECA790D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFocalPoint", "..\SmartCrop\SmartFocalPoint.csproj", "{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFocalPoint", "..\SmartFocalPoint\SmartFocalPoint.csproj", "{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

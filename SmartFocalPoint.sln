@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFocalPoint.Tests", "SmartCrop.Tests\SmartFocalPoint.Tests.csproj", "{CBDE38BB-7D9A-43D0-8E9F-70753A187A71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFocalPoint.Tests", "SmartFocalPoint.Tests\SmartFocalPoint.Tests.csproj", "{CBDE38BB-7D9A-43D0-8E9F-70753A187A71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFocalPoint", "SmartCrop\SmartFocalPoint.csproj", "{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartFocalPoint", "SmartFocalPoint\SmartFocalPoint.csproj", "{D7A760BE-97A2-47EB-8EBD-958BFE8EE5C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

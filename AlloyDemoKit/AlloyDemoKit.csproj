@@ -1088,7 +1088,7 @@
     <Folder Include="modules\_protected\EPiServer.Labs.LanguageManager\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SmartCrop\SmartFocalPoint.csproj">
+    <ProjectReference Include="..\SmartFocalPoint\SmartFocalPoint.csproj">
       <Project>{d7a760be-97a2-47eb-8ebd-958bfe8ee5c0}</Project>
       <Name>SmartFocalPoint</Name>
     </ProjectReference>
