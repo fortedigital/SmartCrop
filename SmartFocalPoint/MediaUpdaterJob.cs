@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.WebPages;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
 using EPiServer.Logging;
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
-using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using Forte.SmartFocalPoint.Models.Media;
 using SiteDefinition = EPiServer.Web.SiteDefinition;
@@ -45,38 +47,53 @@ namespace Forte.SmartFocalPoint
             OnStatusChanged(String.Format("Starting execution of {0}", this.GetType()));
 
             var assetsRoot = SiteDefinition.Current.GlobalAssetsRoot;
-            return UpdateChildren(assetsRoot);
+            return UpdateImages(assetsRoot);
             
         }
 
-        private string UpdateChildren(ContentReference reference)
+        private string UpdateImages(ContentReference reference)
         {
-            var childrenFolders = _contentRepository.GetChildren<ContentFolder>(reference);
-            var images = _contentLoader.GetChildren<ImageData>(reference);
+            //var childrenFolders = _contentRepository.GetChildren<ContentFolder>(reference);
+            //var images = _contentLoader.GetChildren<ImageData>(reference);
+            var images = _contentRepository.GetDescendents(reference)
+                .Where(r => _contentRepository.Get<IContent>(r) is ImageData)
+                .Select(_contentRepository.Get<ImageData>);
+
+            var skippedImages = new List<string>();
+            var imagesCount = images.Count();
+            var updatedCount = 0;
+
+
             foreach (var image in images)
             {
-                UpdateProperties(image);
-            }
+                var returnedStatus = UpdateProperties(image);
+                updatedCount++;
 
-            //For long running jobs periodically check if stop is signaled and if so stop execution
-            if (_stopSignaled)
-            {
-                return "Stop of job was called";
-            }
+                if (!returnedStatus.IsEmpty())
+                {
+                    skippedImages.Add(returnedStatus);
+                }
 
-            foreach (var folder in childrenFolders)
-            {
-                UpdateChildren(folder.ContentLink);
-            }
+                //For long running jobs periodically check if stop is signaled and if so stop execution
+                if (_stopSignaled)
+                {
+                    return "Stop of job was called.\r\n" + GetStatusMessage(updatedCount, imagesCount, skippedImages);
+                }
 
-            return "Image files' properties updated";
+                //foreach (var folder in childrenFolders)
+                //{
+                //    UpdateImages(folder.ContentLink);
+                //}
+                
+            }
+            return "Image files' properties updated.\r\n" + GetStatusMessage(updatedCount, imagesCount, skippedImages);
         }
 
-        private void UpdateProperties(ImageData image)
+        private string UpdateProperties(ImageData image)
         {
             
             if(!(image is FocalImageData focalImage))
-                return;
+                return $"{image.Name} is not of type {nameof(FocalImageData)}";
 
             if (SetForAll || focalImage.FocalPoint == null)
             {
@@ -89,10 +106,24 @@ namespace Forte.SmartFocalPoint
                 catch (AccessDeniedException ex)
                 {
                     Logger.Error(ex.Message);
+                    return $"{image.Name}: {ex.Message}";
                 }
 
             }
 
+            return string.Empty;
+        }
+
+        private string GetStatusMessage(int updatedImagesCount, int allImagesCount, List<string> returnStatuses)
+        {
+            var message = $"Updated images: {updatedImagesCount} out of {allImagesCount}, " +
+                          $"including {returnStatuses.Count} skipped files.\r\n";
+            foreach (var statMsg in returnStatuses)
+            {
+                message = message + statMsg + "\r\n";
+            }
+
+            return message;
         }
     }
 
