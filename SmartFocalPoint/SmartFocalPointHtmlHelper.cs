@@ -11,6 +11,7 @@ using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using ImageResizer;
+using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 
 namespace Forte.SmartFocalPoint
 {
@@ -192,6 +193,11 @@ namespace Forte.SmartFocalPoint
 
                 double cropRatio = width / (double)height;
                 double originalRatio = originalImage.Width / (double)originalImage.Height;
+
+                if (imageFile.FocalPoint == null)
+                {
+                    return $"0,0,{originalImage.Width},{originalImage.Height}";
+                }
 
                 var cropQuery = string.Empty;
                 var cropX = 0.0;

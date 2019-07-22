@@ -25,6 +25,11 @@ namespace Forte.SmartFocalPoint.Models.Media
         {
             base.SetDefaultValues(contentType);
             this.SmartFocalPointEnabled = true;
+            this.FocalPoint = new FocalPoint
+            {
+                X = 0.5,
+                Y = 0.5
+            };
         }
     }
 }

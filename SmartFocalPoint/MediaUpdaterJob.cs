@@ -55,12 +55,13 @@ namespace Forte.SmartFocalPoint
         {
             //var childrenFolders = _contentRepository.GetChildren<ContentFolder>(reference);
             //var images = _contentLoader.GetChildren<ImageData>(reference);
-            var images = _contentRepository.GetDescendents(reference)
+            var imagesEnumerable = _contentRepository.GetDescendents(reference)
                 .Where(r => _contentRepository.Get<IContent>(r) is ImageData)
                 .Select(_contentRepository.Get<ImageData>);
+            var images = imagesEnumerable as ImageData[] ?? imagesEnumerable.ToArray();
 
             var skippedImages = new List<string>();
-            var imagesCount = images.Count();
+            var imagesCount = images.Length;
             var updatedCount = 0;
 
 
