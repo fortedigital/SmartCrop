@@ -18,13 +18,25 @@ namespace AlloyDemoKit.Models.Pages
         public virtual ContentReference ImageHuge { get; set; }
 
         [UIHint(UIHint.Image)]
+        public virtual ContentReference ImageHugeWithoutSmart { get; set; }
+
+        [UIHint(UIHint.Image)]
         public virtual ContentReference ImageSmallWidth { get; set; }
-        
+
+        [UIHint(UIHint.Image)]
+        public virtual ContentReference ImageSmallWidthWithoutSmart { get; set; }
+
         [UIHint(UIHint.Image)]
         public virtual ContentReference ImageSmallHeight { get; set; }
-        
+
+        [UIHint(UIHint.Image)]
+        public virtual ContentReference ImageSmallHeightWithoutSmart { get; set; }
+
         [UIHint(UIHint.Image)]
         public virtual ContentReference ImageSmallBoth { get; set; }
-        
+
+        [UIHint(UIHint.Image)]
+        public virtual ContentReference ImageSmallBothWithoutSmart { get; set; }
+
     }
 }
