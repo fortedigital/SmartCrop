@@ -13,11 +13,13 @@ namespace SmartFocalPointTests
     {
         
         [TestMethod]
-        public void CalculateCropTest()
+        [CropDataSource]
+        public void CalculateCropTest(double focalX, double focalY, 
+                                      int? originalW, int? originalH, 
+                                      int width, int height, string expected)
         {
-            string expected = $"({750.0},{600.0},{1050.0},{900.0})";
             string actual = SmartFocalPointCalculator
-                .CalculateCrop(50.0, 50.0, 1800, 1500, 300, 300);
+                .CalculateCrop(focalX, focalY, originalW, originalH, width, height);
 
             Assert.AreEqual(expected,actual);
         }
