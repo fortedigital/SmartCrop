@@ -35,35 +35,38 @@ namespace Forte.SmartFocalPoint
 
         private void HandlePublishingContent(object sender, ContentEventArgs e)
         {
-            if (e.Content is FocalImageData imageFile)
+            if (!(e.Content is FocalImageData imageFile))
+                return;
+
+            if (!_settings.LoadSettings())
+                return;
+
+            if (WasEdited(imageFile))
+                return;
+
+            using (var stream = ReadBlob(imageFile))
             {
-                if (_settings.LoadSettings() && !WasEdited(imageFile))
+                var originalImage = Image.FromStream(stream);
+
+                var resizedImage = ResizeImage(originalImage, MaxSize);
+
+                var boundingRect = GetAreaOfInterest(resizedImage) ?? new BoundingRect();
+
+                double scaleX = 1.0 / (resizedImage.Width / (double) originalImage.Width);
+                double scaleY = 1.0 / (resizedImage.Height / (double) originalImage.Height);
+
+                var areaOfInterestX = (int) (boundingRect.X * scaleX);
+                var areaOfInterestY = (int) (boundingRect.Y * scaleY);
+                var areaOfInterestWidth = (int) (boundingRect.W * scaleX);
+                var areaOfInterestHeight = (int) (boundingRect.H * scaleY);
+
+                var middlePointX = areaOfInterestX + areaOfInterestWidth / 2;
+                var middlePointY = areaOfInterestY + areaOfInterestHeight / 2;
+                imageFile.FocalPoint = new FocalPoint()
                 {
-                    using (var stream = ReadBlob(imageFile))
-                    {
-                        var originalImage = Image.FromStream(stream);
-
-                        var resizedImage = ResizeImage(originalImage, MaxSize);
-
-                        var boundingRect = GetAreaOfInterest(resizedImage) ?? new BoundingRect();
-
-                        double scaleX = 1.0 / (resizedImage.Width / (double) originalImage.Width);
-                        double scaleY = 1.0 / (resizedImage.Height / (double) originalImage.Height);
-
-                        var areaOfInterestX = (int) (boundingRect.X * scaleX);
-                        var areaOfInterestY = (int) (boundingRect.Y * scaleY);
-                        var areaOfInterestWidth = (int) (boundingRect.W * scaleX);
-                        var areaOfInterestHeight = (int) (boundingRect.H * scaleY);
-
-                        var middlePointX = areaOfInterestX + areaOfInterestWidth / 2;
-                        var middlePointY = areaOfInterestY + areaOfInterestHeight / 2;
-                        imageFile.FocalPoint = new FocalPoint()
-                        {
-                            X = 100 * middlePointX / (double) originalImage.Width,
-                            Y = 100 * middlePointY / (double) originalImage.Height
-                        };
-                    }
-                }
+                    X = 100 * middlePointX / (double) originalImage.Width,
+                    Y = 100 * middlePointY / (double) originalImage.Height
+                };
             }
 
         }
