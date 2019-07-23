@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Net.Configuration;
-using System.Runtime.CompilerServices;
-using System.Web.Mvc;
-using Forte.SmartFocalPoint.Models.Media;
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
-using ImageResizer;
-using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
+using Forte.SmartFocalPoint.Models.Media;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Web.Mvc;
 
 namespace Forte.SmartFocalPoint
 {
@@ -31,7 +27,7 @@ namespace Forte.SmartFocalPoint
                 return MvcHtmlString.Empty;
             }
 
-            string imageBaseUrl = ResolveImageUrl(image);
+            var imageBaseUrl = ResolveImageUrl(image);
             ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out FocalImageData imageFile);
 
             if (imageFile.OriginalWidth == null || imageFile.OriginalHeight == null)

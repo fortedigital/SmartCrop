@@ -1,13 +1,6 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using EPiServer;
-using EPiServer.Core;
-using EPiServer.DataAccess;
-using EPiServer.PlugIn;
-using EPiServer.ServiceLocation;
-using EPiServer.Web;
-using Forte.SmartFocalPoint.Models.Media;
+﻿using EPiServer.PlugIn;
 using Forte.SmartFocalPoint.Models.ViewModels;
+using System.Web.Mvc;
 
 namespace Forte.SmartFocalPoint.Business
 {
@@ -40,7 +33,7 @@ namespace Forte.SmartFocalPoint.Business
 
         public bool GetSmartFocalPointSetting()
         {
-            return _settings.LoadSettings();
+            return _settings.IsConnectionEnabled();
         }
         
     }

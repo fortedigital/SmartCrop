@@ -19,8 +19,7 @@ namespace Forte.SmartFocalPoint
     {
         private bool _stopSignaled;
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-        private readonly IContentLoader _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-        private readonly ILogger Logger = LogManager.GetLogger();
+        private readonly ILogger _logger = LogManager.GetLogger();
 
         protected bool SetForAll;
 
@@ -44,7 +43,7 @@ namespace Forte.SmartFocalPoint
         public override string Execute()
         {
             //Call OnStatusChanged to periodically notify progress of job for manually started jobs
-            OnStatusChanged(String.Format("Starting execution of {0}", this.GetType()));
+            OnStatusChanged($"Starting execution of {this.GetType()}");
 
             var assetsRoot = SiteDefinition.Current.GlobalAssetsRoot;
             return UpdateImages(assetsRoot);
@@ -89,26 +88,25 @@ namespace Forte.SmartFocalPoint
             if(!(image is FocalImageData focalImage))
                 return $"{image.Name} is not of type {nameof(FocalImageData)}";
 
-            if (SetForAll || focalImage.FocalPoint == null)
-            {
-                //republish image
-                var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
-                try
-                {
-                    _contentRepository.Save(file, SaveAction.Publish | SaveAction.ForceCurrentVersion);
-                }
-                catch (AccessDeniedException ex)
-                {
-                    Logger.Error(ex.Message);
-                    return $"{image.Name}: {ex.Message}";
-                }
+            if (!SetForAll && focalImage.FocalPoint != null)
+                return string.Empty;
 
+            //republish image
+            var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
+            try
+            {
+                _contentRepository.Save(file, SaveAction.Publish | SaveAction.ForceCurrentVersion);
+            }
+            catch (AccessDeniedException ex)
+            {
+                _logger.Error(ex.Message);
+                return $"{image.Name}: {ex.Message}";
             }
 
             return string.Empty;
         }
 
-        private string GetStatusMessage(int updatedImagesCount, int allImagesCount, List<string> returnStatuses)
+        private static string GetStatusMessage(int updatedImagesCount, int allImagesCount, List<string> returnStatuses)
         {
             var message = $"Updated images: {updatedImagesCount} out of {allImagesCount}, " +
                           $"including {returnStatuses.Count} skipped files.\r\n";

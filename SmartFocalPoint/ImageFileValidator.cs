@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.Validation;
 using Forte.SmartFocalPoint.Models.Media;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Forte.SmartFocalPoint
 {

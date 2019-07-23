@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
-using ImageResizer.Plugins.EPiFocalPoint;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
+using System.ComponentModel.DataAnnotations;
 
 namespace Forte.SmartFocalPoint.Models.Media
 {
-    public abstract class FocalImageData : ImageData, IFocalPointData
+    public abstract class FocalImageData : ImageData, IFocalImageData
     {
         
         public virtual bool SmartFocalPointEnabled { get; set; }

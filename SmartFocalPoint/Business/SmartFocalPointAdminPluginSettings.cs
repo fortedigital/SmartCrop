@@ -7,25 +7,25 @@ namespace Forte.SmartFocalPoint.Business
 {
     public class SmartFocalPointAdminPluginSettings
     {
-        private DataSet customDataSet;
+        private readonly DataSet _customDataSet;
         private const string Key = "SmartCrop";
         private static readonly ILogger Logger = LogManager.GetLogger();
 
         public SmartFocalPointAdminPluginSettings()
         {
-            customDataSet = new DataSet();
-            customDataSet.Tables.Add(new DataTable());
-            customDataSet.Tables[0].Columns.Add(new DataColumn(Key, typeof(string)));
+            _customDataSet = new DataSet();
+            _customDataSet.Tables.Add(new DataTable());
+            _customDataSet.Tables[0].Columns.Add(new DataColumn(Key, typeof(string)));
         }
 
-        public bool LoadSettings()
+        private bool LoadSettings()
         {
 
             var returnVal = string.Empty;
             try
             {
-                PlugInSettings.Populate(typeof(SmartFocalPointAdminPluginSettings), customDataSet);
-                returnVal = customDataSet.Tables[0].Rows[0][Key].ToString();
+                PlugInSettings.Populate(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
+                returnVal = _customDataSet.Tables[0].Rows[0][Key].ToString();
             }
             catch (Exception ex)
             {
@@ -35,14 +35,19 @@ namespace Forte.SmartFocalPoint.Business
             return string.Equals("True", returnVal);
         }
 
+        public bool IsConnectionEnabled()
+        {
+            return LoadSettings();
+        }
+
         public void SaveSettings(bool value)
         {
             try
             {
-                var newRow = customDataSet.Tables[0].NewRow();
+                var newRow = _customDataSet.Tables[0].NewRow();
                 newRow[Key] = value.ToString();
-                customDataSet.Tables[0].Rows.Add(newRow);
-                PlugInSettings.Save(typeof(SmartFocalPointAdminPluginSettings), customDataSet);
+                _customDataSet.Tables[0].Rows.Add(newRow);
+                PlugInSettings.Save(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
             }
             catch (Exception ex)
             {

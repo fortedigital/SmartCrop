@@ -1,10 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -12,11 +6,17 @@ using EPiServer.Logging;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 using Forte.SmartFocalPoint.Business;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Forte.SmartFocalPoint.Models.Media;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
-using Microsoft.Rest.ClientRuntime;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+using System;
+using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using ImageResizer.Plugins.EPiFocalPoint;
 
 namespace Forte.SmartFocalPoint
 {
@@ -26,7 +26,7 @@ namespace Forte.SmartFocalPoint
     {
 	    private const int MaxSize = 1024;
         private static readonly ILogger Logger = LogManager.GetLogger();
-        private SmartFocalPointAdminPluginSettings _settings = new SmartFocalPointAdminPluginSettings();
+        private readonly SmartFocalPointAdminPluginSettings _settings = new SmartFocalPointAdminPluginSettings();
 
 		public void Initialize(InitializationEngine context)
         {
@@ -38,7 +38,7 @@ namespace Forte.SmartFocalPoint
             if (!(e.Content is FocalImageData imageFile))
                 return;
 
-            if (!_settings.LoadSettings())
+            if (!_settings.IsConnectionEnabled())
                 return;
 
             if (WasEdited(imageFile))
@@ -52,8 +52,8 @@ namespace Forte.SmartFocalPoint
 
                 var boundingRect = GetAreaOfInterest(resizedImage) ?? new BoundingRect();
 
-                double scaleX = 1.0 / (resizedImage.Width / (double) originalImage.Width);
-                double scaleY = 1.0 / (resizedImage.Height / (double) originalImage.Height);
+                var scaleX = 1.0 / (resizedImage.Width / (double) originalImage.Width);
+                var scaleY = 1.0 / (resizedImage.Height / (double) originalImage.Height);
 
                 var areaOfInterestX = (int) (boundingRect.X * scaleX);
                 var areaOfInterestY = (int) (boundingRect.Y * scaleY);
@@ -71,7 +71,7 @@ namespace Forte.SmartFocalPoint
 
         }
 
-        private bool WasEdited(FocalImageData image)
+        private static bool WasEdited(IFocalPointData image)
         {
             var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
