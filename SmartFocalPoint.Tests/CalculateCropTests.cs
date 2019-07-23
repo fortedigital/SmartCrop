@@ -1,10 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿using Forte.SmartFocalPoint;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Forte.SmartFocalPoint;
-using Forte.SmartFocalPoint.Models.Media;
-using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
-using Moq;
 
 namespace SmartFocalPointTests
 {
@@ -18,7 +13,7 @@ namespace SmartFocalPointTests
                                       int? originalW, int? originalH, 
                                       int width, int height, string expected)
         {
-            string actual = SmartFocalPointCalculator
+            var actual = SmartFocalPointCalculator
                 .CalculateCrop(focalX, focalY, originalW, originalH, width, height);
 
             Assert.AreEqual(expected,actual);

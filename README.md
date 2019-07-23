@@ -4,8 +4,6 @@
 
 1. Configure your Web.config file - add following keys:
 
-Example:
-
 ```xml
   <appSettings>
     ...
@@ -14,12 +12,25 @@ Example:
   </appSettings>
 ```
 
-2. Make your ImageFile model inherit from FocalImageData
-
-Example:
+2.1. Make your ImageFile model inherit from FocalImageData
 
 ```csharp
 public class ImageFile : FocalImageData
+```
+
+OR
+
+2.2. Inherit from IFocalImageData
+
+```csharp
+public class ImageFile : IFocalImageData
+```
+
+in this case decorate FocalPoint property with following attribute
+
+```csharp
+[BackingType(typeof(PropertyFocalPoint))]
+public virtual FocalPoint FocalPoint { get; set; }
 ```
 
 ## Basic usage:
