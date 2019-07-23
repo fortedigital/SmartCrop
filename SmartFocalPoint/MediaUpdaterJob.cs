@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.WebPages;
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
 using EPiServer.Logging;
@@ -10,19 +6,21 @@ using EPiServer.PlugIn;
 using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
 using Forte.SmartFocalPoint.Models.Media;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.WebPages;
 using SiteDefinition = EPiServer.Web.SiteDefinition;
 
 namespace Forte.SmartFocalPoint
 {
-    
+    [ScheduledPlugIn(DisplayName = "Set FocalPoint For Unset Images", GUID = "DF91149F-796B-441F-A9C0-CF88D38FF58F",
+        Description = "Goes over image files and updates FocalPoint property for unset images")]
     public class MediaUpdaterJob : ScheduledJobBase
     {
         private bool _stopSignaled;
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         private readonly ILogger _logger = LogManager.GetLogger();
-
-        protected bool SetForAll;
-
+        
         public MediaUpdaterJob()
         {
             IsStoppable = true;
@@ -88,7 +86,7 @@ namespace Forte.SmartFocalPoint
             if(!(image is FocalImageData focalImage))
                 return $"{image.Name} is not of type {nameof(FocalImageData)}";
 
-            if (!SetForAll && focalImage.FocalPoint != null)
+            if (focalImage.FocalPoint != null)
                 return string.Empty;
 
             //republish image
@@ -116,29 +114,6 @@ namespace Forte.SmartFocalPoint
             }
 
             return message;
-        }
-    }
-
-    [ScheduledPlugIn(DisplayName = "Set FocalPoint For Unset Images", GUID = "DF91149F-796B-441F-A9C0-CF88D38FF58F",
-        Description = "Goes over image files and updates focal point properties for unset images")]
-    public class UpdateUnsetImages : MediaUpdaterJob
-    {
-
-        public UpdateUnsetImages()
-        {
-            SetForAll = false;
-        }
-
-    }
-
-    [ScheduledPlugIn(DisplayName = "Set FocalPoint For All Images", GUID = "515A9EFA-910F-4A19-8B50-DE60678A097E",
-        Description = "Goes over image files and updates all of them with focal point properties")]
-    public class UpdateAllImages : MediaUpdaterJob
-    {
-
-        public UpdateAllImages()
-        {
-            SetForAll = true;
         }
     }
 

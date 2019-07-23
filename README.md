@@ -26,12 +26,20 @@ OR
 public class ImageFile : IFocalImageData
 ```
 
-in this case decorate FocalPoint property with following attribute
+In this case you need to decorate FocalPoint property with following attribute
 
 ```csharp
 [BackingType(typeof(PropertyFocalPoint))]
 public virtual FocalPoint FocalPoint { get; set; }
 ```
+
+Also optionally decorate SmartCropEnabled flag to be more descriptive for editors
+
+```csharp
+[Display(Name = "Use FocalPoint for cropping")]
+public virtual bool SmartFocalPointEnabled { get; set; }
+```
+<br/>
 
 ## Basic usage:
 

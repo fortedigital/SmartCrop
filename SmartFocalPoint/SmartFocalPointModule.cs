@@ -40,8 +40,7 @@ namespace Forte.SmartFocalPoint
 
             if (!_settings.IsConnectionEnabled())
                 return;
-
-            //if (DidFocalPointChange(imageFile))
+            
             if(imageFile.FocalPoint != null)
                 return;
 
@@ -73,25 +72,6 @@ namespace Forte.SmartFocalPoint
                 };
             }
 
-        }
-
-        private static bool DidFocalPointChange(IFocalPointData image)
-        {
-            var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
-            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-
-            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return false;
-            
-            var lastVersion = contentVersionRepository
-                .List(image.ContentLink)
-                .Where(p => p.Status == VersionStatus.PreviouslyPublished)
-                .OrderByDescending(p => p.Saved)
-                .FirstOrDefault();
-
-            if (lastVersion == null) return false;
-
-            var lastImage = contentRepository.Get<FocalImageData>(lastVersion.ContentLink);
-            return lastImage.FocalPoint != image.FocalPoint;
         }
 
         private static Image ResizeImage(Image originalImage, int maxSize)
@@ -156,7 +136,7 @@ namespace Forte.SmartFocalPoint
             }
         }
 
-        public static bool HandleException(Exception ex)
+        private static bool HandleException(Exception ex)
         {
             if (!(ex is ComputerVisionErrorException exception)) return false;
             Logger.Error(exception.Body.ToString());
@@ -168,5 +148,25 @@ namespace Forte.SmartFocalPoint
         {
             context.Locate.ContentEvents().PublishingContent -= HandlePublishingContent;
         }
+
+        private static bool DidFocalPointChange(IFocalPointData image)
+        {
+            var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+
+            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return false;
+
+            var lastVersion = contentVersionRepository
+                .List(image.ContentLink)
+                .Where(p => p.Status == VersionStatus.PreviouslyPublished)
+                .OrderByDescending(p => p.Saved)
+                .FirstOrDefault();
+
+            if (lastVersion == null) return false;
+
+            var lastImage = contentRepository.Get<FocalImageData>(lastVersion.ContentLink);
+            return lastImage.FocalPoint != image.FocalPoint;
+        }
+
     }
 }
