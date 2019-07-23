@@ -13,13 +13,13 @@ namespace Forte.SmartFocalPoint
 {
     public static class SmartFocalPointHtmlHelper
     {
-        //TODO?: when in smartFocalpoint and forcedSize not always centered on focalpoint?
+
         public static MvcHtmlString FocusedImage(
             this HtmlHelper helper,
             ContentReference image,
             int? width = null,
             int? height = null,
-            bool forceSize = false,
+            string objectFitMode = "crop",
             bool noZoomOut = false)
         {
             if (ContentReference.IsNullOrEmpty(image))
@@ -36,43 +36,32 @@ namespace Forte.SmartFocalPoint
             }
 
             var parameters = new List<string>();
-            var hasSmartFocalPoint = imageFile.SmartFocalPointEnabled;
+            var isSmartFocalPointEnabled = imageFile.SmartFocalPointEnabled;
 
             var maxWidth = imageFile.OriginalWidth.Value;
             var maxHeight = imageFile.OriginalHeight.Value;
 
             //forcing size doesnt make sense if image is big enough
-            forceSize = forceSize && (width > maxWidth || height > maxHeight);
+            //objectFitMode = objectFitMode && (width > maxWidth || height > maxHeight);
 
-            if (noZoomOut && 
-                (width == null || width <= maxWidth) &&
-                (height == null || height <= maxHeight))
+            width = width ?? maxWidth;
+            height = height ?? maxHeight;
+
+            if (noZoomOut && width <= maxWidth && height <= maxHeight)
             {
-                parameters.Add("crop="+ CalculateCrop(imageFile, 
-                                   width ?? maxWidth, 
-                                   height ?? maxHeight));
+                parameters.Add("crop="+ CalculateCrop(imageFile, width.Value, height.Value));
             }
             else
             {
-                if (width != null)
-                {
-                    parameters.Add(
-                        hasSmartFocalPoint ? "w=" + width : "width=" + width
-                    );
-                }
-
-                if (height != null)
-                {
-                    parameters.Add(
-                        hasSmartFocalPoint ? "h=" + height : "height=" + height
-                    );
-                }
+                parameters.Add(isSmartFocalPointEnabled ? "w=" + width : "width=" + width);
+                
+                parameters.Add(isSmartFocalPointEnabled ? "h=" + height : "height=" + height);
             }
 
             parameters.Add("mode=crop");
 
             //forcing size wont do anything with width and height parameters
-            if (forceSize && hasSmartFocalPoint)
+            if (objectFitMode && isSmartFocalPointEnabled)
             {
                 parameters.Add("scale=both");
             }

@@ -49,7 +49,7 @@
             <h2>Without SmartCrop</h2>
             @Html.FocusedImage(elem.Item3, s)<br /><br />
             <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, s, forceSize: true)<br /><br />
+            @Html.FocusedImage(elem.Item2, s, objectFitMode: true)<br /><br />
             <h2>With SmartCrop & No ZoomOut</h2>
             @Html.FocusedImage(elem.Item2, s, noZoomOut: true)<br /><br />
 
@@ -59,7 +59,7 @@
             <h2>Without SmartCrop</h2>
             @Html.FocusedImage(elem.Item3, height: s)<br /><br />
             <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, height: s, forceSize: true)<br /><br />
+            @Html.FocusedImage(elem.Item2, height: s, objectFitMode: true)<br /><br />
             <h2>With SmartCrop & No ZoomOut</h2>
             @Html.FocusedImage(elem.Item2, height: s, noZoomOut: true)<br /><br />
         }
