@@ -40,32 +40,46 @@ namespace Forte.SmartFocalPoint
 
             var maxWidth = imageFile.OriginalWidth.Value;
             var maxHeight = imageFile.OriginalHeight.Value;
+            
+            var widthValue = width ?? maxWidth;
+            var heightValue = height ?? maxHeight;
 
-            //forcing size doesnt make sense if image is big enough
-            //objectFitMode = objectFitMode && (width > maxWidth || height > maxHeight);
-
-            width = width ?? maxWidth;
-            height = height ?? maxHeight;
-
-            if (noZoomOut && width <= maxWidth && height <= maxHeight)
+            if (noZoomOut && 
+                widthValue <= maxWidth && 
+                heightValue <= maxHeight)
             {
-                parameters.Add("crop="+ CalculateCrop(imageFile, width.Value, height.Value));
+                parameters.Add("crop="+ CalculateCrop(imageFile, widthValue, heightValue));
             }
             else
             {
-                parameters.Add(isSmartFocalPointEnabled ? "w=" + width : "width=" + width);
-                
-                parameters.Add(isSmartFocalPointEnabled ? "h=" + height : "height=" + height);
+                if (width != null)
+                {
+                    parameters.Add(isSmartFocalPointEnabled ? "w=" + width : "width=" + width);
+                }
+
+                if (height != null)
+                {
+                    parameters.Add(isSmartFocalPointEnabled ? "h=" + height : "height=" + height);
+                }
             }
 
-            parameters.Add("mode=crop");
-
-            //forcing size wont do anything with width and height parameters
-            if (objectFitMode && isSmartFocalPointEnabled)
+            switch (objectFitMode)
             {
-                parameters.Add("scale=both");
+                case "fill":
+                    if (isSmartFocalPointEnabled &&
+                        (width > maxWidth || height > maxHeight))
+                    {
+                        parameters.Add("scale=both");
+                    }
+                    break;
+                case "contain":
+                    parameters.Add("mode=max");
+                    break;
+                default:
+                    parameters.Add("mode=crop");
+                    break;
             }
-
+            
             var separator = imageBaseUrl.Contains("?") ? "&" : "?";
             var imageUrl = imageBaseUrl + separator + string.Join("&", parameters);
 
@@ -76,13 +90,19 @@ namespace Forte.SmartFocalPoint
 
         private static string CalculateCrop(FocalImageData image, int width, int height)
         {
-            var middleX = image.FocalPoint.X * image.OriginalWidth / 100;
-            var middleY = image.FocalPoint.Y * image.OriginalHeight / 100;
+            if (image == null)
+                return $"({0},{0},{width},{height})";
+
+            var x = image.FocalPoint?.X ?? 50.0;
+            var y = image.FocalPoint?.Y ?? 50.0;
+
+            var middleX = x * image.OriginalWidth / 100;
+            var middleY = y * image.OriginalHeight / 100;
 
             var X1 = middleX - width / 2;
-            var X2 = middleX + width / 2;
+            var X2 = X1 + width;
             var Y1 = middleY - height / 2;
-            var Y2 = middleY + height / 2;
+            var Y2 = Y1 + height;
 
             if (X1 < 0.0)
             {
@@ -108,6 +128,11 @@ namespace Forte.SmartFocalPoint
                 Y1 -= offset;
                 Y2 = image.OriginalHeight;
             }
+
+            X1 = Math.Round(X1.Value, 4, MidpointRounding.ToEven);
+            X2 = Math.Round(X2.Value, 4, MidpointRounding.ToEven);
+            Y1 = Math.Round(Y1.Value, 4, MidpointRounding.ToEven);
+            Y2 = Math.Round(Y2.Value, 4, MidpointRounding.ToEven);
 
             return $"({X1},{Y1},{X2},{Y2})";
         }

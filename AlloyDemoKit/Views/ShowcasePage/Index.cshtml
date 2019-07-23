@@ -31,37 +31,61 @@
         foreach (var wh in ws.Zip(hs, Tuple.Create))
         {
             <h1>@wh.Item1 x @wh.Item2</h1>
-            <h2>With SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2)<br /><br />
-            <h2>Without SmartCrop</h2>
-            @Html.FocusedImage(elem.Item3, wh.Item1, wh.Item2)<br /><br />
-            <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2, true)<br /><br />
+            @*<h2>With SmartCrop</h2>
+                @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2)<br /><br />*@
             <h2>With SmartCrop & No ZoomOut</h2>
             @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2, noZoomOut: true)<br /><br />
+            @*<h2>With SmartCrop & Mode Fill</h2>
+                @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2, "fill")<br /><br />
+                <h2>With SmartCrop & Mode Max</h2>
+                @Html.FocusedImage(elem.Item2, wh.Item1, wh.Item2, "max")<br /><br />
+                <h2>Without SmartCrop</h2>
+                @Html.FocusedImage(elem.Item3, wh.Item1, wh.Item2)<br /><br />*@
+            <h2>Without SmartCrop & No ZoomOut</h2>
+            @Html.FocusedImage(elem.Item3, wh.Item1, wh.Item2, noZoomOut: true)<br /><br />
+            @*<h2>Without SmartCrop & Mode Fill</h2>
+                @Html.FocusedImage(elem.Item3, wh.Item1, wh.Item2, "fill")<br /><br />
+                <h2>Without SmartCrop & Mode Max</h2>
+                @Html.FocusedImage(elem.Item3, wh.Item1, wh.Item2, "max")<br /><br />*@
         }
 
         foreach (var s in ws.Distinct())
         {
             <h1>@s x ?</h1>
-            <h2>With SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, s)<br /><br />
-            <h2>Without SmartCrop</h2>
-            @Html.FocusedImage(elem.Item3, s)<br /><br />
-            <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, s, objectFitMode: true)<br /><br />
+            @*<h2>With SmartCrop</h2>
+                @Html.FocusedImage(elem.Item2, s)<br /><br />*@
             <h2>With SmartCrop & No ZoomOut</h2>
             @Html.FocusedImage(elem.Item2, s, noZoomOut: true)<br /><br />
+            @*<h2>With SmartCrop & Mode Fill</h2>
+                @Html.FocusedImage(elem.Item2, s, objectFitMode: "fill")<br /><br />
+                <h2>With SmartCrop & Mode Max</h2>
+                @Html.FocusedImage(elem.Item2, s, objectFitMode: "max")<br /><br />
+                <h2>Without SmartCrop</h2>
+                @Html.FocusedImage(elem.Item3, s)<br /><br />*@
+            <h2>Without SmartCrop & No ZoomOut</h2>
+            @Html.FocusedImage(elem.Item3, s, noZoomOut: true)<br /><br />
+            @*<h2>Without SmartCrop & Mode Fill</h2>
+                @Html.FocusedImage(elem.Item3, s, objectFitMode: "fill")<br /><br />
+                <h2>Without SmartCrop & Mode Max</h2>
+                @Html.FocusedImage(elem.Item3, s, objectFitMode: "max")<br /><br />*@
 
             <h1>? x @s</h1>
-            <h2>With SmartCrop</h2>
-            @Html.FocusedImage(elem.Item2, height: s)<br /><br />
-            <h2>Without SmartCrop</h2>
-            @Html.FocusedImage(elem.Item3, height: s)<br /><br />
-            <h2>With SmartCrop & Forced Size</h2>
-            @Html.FocusedImage(elem.Item2, height: s, objectFitMode: true)<br /><br />
+            @*<h2>With SmartCrop</h2>
+                @Html.FocusedImage(elem.Item2, height: s)<br /><br />*@
             <h2>With SmartCrop & No ZoomOut</h2>
             @Html.FocusedImage(elem.Item2, height: s, noZoomOut: true)<br /><br />
+            @*<h2>With SmartCrop & Mode Fill</h2>
+                @Html.FocusedImage(elem.Item2, height: s, objectFitMode: "fill")<br /><br />
+                <h2>With SmartCrop & Mode Max</h2>
+                @Html.FocusedImage(elem.Item2, height: s, objectFitMode: "max")<br /><br />
+                <h2>Without SmartCrop</h2>
+                @Html.FocusedImage(elem.Item3, height: s)<br /><br />*@
+            <h2>Without SmartCrop & No ZoomOut</h2>
+            @Html.FocusedImage(elem.Item3, height: s, noZoomOut: true)<br /><br />
+            @*<h2>Without SmartCrop & Mode Fill</h2>
+                @Html.FocusedImage(elem.Item3, height: s, objectFitMode: "fill")<br /><br />
+                <h2>Without SmartCrop & Mode Max</h2>
+                @Html.FocusedImage(elem.Item3, height: s, objectFitMode: "max")<br /><br />*@
         }
         <br /><br /><br />
 
