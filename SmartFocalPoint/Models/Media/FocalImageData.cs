@@ -8,7 +8,7 @@ namespace Forte.SmartFocalPoint.Models.Media
 {
     public abstract class FocalImageData : ImageData, IFocalImageData
     {
-        
+        [Display(Name = "Use FocalPoint for cropping")]
         public virtual bool SmartFocalPointEnabled { get; set; }
 
         [BackingType(typeof(PropertyFocalPoint))]
@@ -24,11 +24,6 @@ namespace Forte.SmartFocalPoint.Models.Media
         {
             base.SetDefaultValues(contentType);
             this.SmartFocalPointEnabled = true;
-            this.FocalPoint = new FocalPoint
-            {
-                X = 0.5,
-                Y = 0.5
-            };
         }
     }
 }

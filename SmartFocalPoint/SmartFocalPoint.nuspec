@@ -7,7 +7,7 @@
     <authors>Forte_ Digital</authors>
     <projectUrl>https://github.com/fortedigital/SmartFocalPoint</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Content-aware image cropping tool for EPiServer using Azure Cognitive Services</description>
+    <description>Content-aware automation for Episerver's EPiFocalPoint plugin using Azure Cognitive Services</description>
     <copyright>Copyright 2019</copyright>
 	<dependencies>
             <dependency id="EPiServer.CMS.Core" version="[11.11.0, 12)" />

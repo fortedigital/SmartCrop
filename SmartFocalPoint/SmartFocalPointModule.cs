@@ -41,7 +41,8 @@ namespace Forte.SmartFocalPoint
             if (!_settings.IsConnectionEnabled())
                 return;
 
-            if (WasEdited(imageFile))
+            //if (DidFocalPointChange(imageFile))
+            if(imageFile.FocalPoint != null)
                 return;
 
             using (var stream = ReadBlob(imageFile))
@@ -50,7 +51,10 @@ namespace Forte.SmartFocalPoint
 
                 var resizedImage = ResizeImage(originalImage, MaxSize);
 
-                var boundingRect = GetAreaOfInterest(resizedImage) ?? new BoundingRect();
+                var boundingRect = GetAreaOfInterest(resizedImage);
+
+                if (boundingRect == null)
+                    return;
 
                 var scaleX = 1.0 / (resizedImage.Width / (double) originalImage.Width);
                 var scaleY = 1.0 / (resizedImage.Height / (double) originalImage.Height);
@@ -71,7 +75,7 @@ namespace Forte.SmartFocalPoint
 
         }
 
-        private static bool WasEdited(IFocalPointData image)
+        private static bool DidFocalPointChange(IFocalPointData image)
         {
             var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
@@ -94,8 +98,8 @@ namespace Forte.SmartFocalPoint
         {
 	        int w;
 	        int h;
-	        int desWidth = maxSize;
-	        int desHeight = maxSize;
+	        var desWidth = maxSize;
+	        var desHeight = maxSize;
 
 			if (originalImage.Height > originalImage.Width)
 	        {
@@ -113,7 +117,7 @@ namespace Forte.SmartFocalPoint
 			return originalImage.GetThumbnailImage(w, h, null, IntPtr.Zero);
         }
 
-		private static MemoryStream ReadBlob(FocalImageData content)
+		private static MemoryStream ReadBlob(IBinaryStorable content)
         {
             using (var stream = content.BinaryData.OpenRead())
             {
@@ -127,13 +131,13 @@ namespace Forte.SmartFocalPoint
 
         private static BoundingRect GetAreaOfInterest(Image image)
         {
-	        using (MemoryStream imageStream = new MemoryStream())
+	        using (var imageStream = new MemoryStream())
 	        {
 				image.Save(imageStream, ImageFormat.Png);
 				imageStream.Seek(0L, SeekOrigin.Begin);
 
-                string key = ConfigurationManager.AppSettings["CognitiveServicesApiKey"];
-                string server = ConfigurationManager.AppSettings["CognitiveServicesServer"];
+                var key = ConfigurationManager.AppSettings["CognitiveServicesApiKey"];
+                var server = ConfigurationManager.AppSettings["CognitiveServicesServer"];
 
 				var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(key))
 		        {
@@ -146,7 +150,7 @@ namespace Forte.SmartFocalPoint
                 }
                 catch (AggregateException exceptions)
                 {
-                    exceptions.Handle(ex => HandleException(ex));
+                    exceptions.Handle(HandleException);
                     return null;
                 }
             }
@@ -154,13 +158,10 @@ namespace Forte.SmartFocalPoint
 
         public static bool HandleException(Exception ex)
         {
-            if (ex is ComputerVisionErrorException exception)
-            {
-                Logger.Error(exception.Body.ToString());
-                return true;
-            }
+            if (!(ex is ComputerVisionErrorException exception)) return false;
+            Logger.Error(exception.Body.ToString());
+            return true;
 
-            return false;
         }
 
 		public void Uninitialize(InitializationEngine context)
