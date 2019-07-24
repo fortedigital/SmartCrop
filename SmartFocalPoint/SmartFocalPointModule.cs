@@ -35,15 +35,20 @@ namespace Forte.SmartFocalPoint
 
         private void HandlePublishingContent(object sender, ContentEventArgs e)
         {
-            if (!(e.Content is FocalImageData imageFile))
+            if (!(e.Content is IFocalImageData imageFile))
+                return;
+
+            //if FP is set then leave it
+            if (imageFile.FocalPoint != null)
+                return;
+
+            //if FP is null and last version is not then editor set it so, leave it
+            if (!IsLastVersionFocalPointNull(imageFile))
                 return;
 
             if (!_settings.IsConnectionEnabled())
                 return;
             
-            if(imageFile.FocalPoint != null)
-                return;
-
             using (var stream = ReadBlob(imageFile))
             {
                 var originalImage = Image.FromStream(stream);
@@ -149,12 +154,12 @@ namespace Forte.SmartFocalPoint
             context.Locate.ContentEvents().PublishingContent -= HandlePublishingContent;
         }
 
-        private static bool DidFocalPointChange(IFocalPointData image)
+        private static bool IsLastVersionFocalPointNull(IFocalPointData image)
         {
             var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
-            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return false;
+            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return true;
 
             var lastVersion = contentVersionRepository
                 .List(image.ContentLink)
@@ -162,10 +167,10 @@ namespace Forte.SmartFocalPoint
                 .OrderByDescending(p => p.Saved)
                 .FirstOrDefault();
 
-            if (lastVersion == null) return false;
+            if (lastVersion == null) return true;
 
-            var lastImage = contentRepository.Get<FocalImageData>(lastVersion.ContentLink);
-            return lastImage.FocalPoint != image.FocalPoint;
+            var lastImage = contentRepository.Get<IFocalImageData>(lastVersion.ContentLink);
+            return lastImage.FocalPoint == null;
         }
 
     }

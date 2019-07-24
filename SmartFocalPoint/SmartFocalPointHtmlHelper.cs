@@ -5,8 +5,6 @@ using EPiServer.Web.Routing;
 using Forte.SmartFocalPoint.Models.Media;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Web.Mvc;
 
 namespace Forte.SmartFocalPoint
@@ -28,7 +26,7 @@ namespace Forte.SmartFocalPoint
             }
 
             var imageBaseUrl = ResolveImageUrl(image);
-            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out FocalImageData imageFile);
+            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out IFocalImageData imageFile);
 
             if (imageFile.OriginalWidth == null || imageFile.OriginalHeight == null)
             {
@@ -83,12 +81,12 @@ namespace Forte.SmartFocalPoint
             var separator = imageBaseUrl.Contains("?") ? "&" : "?";
             var imageUrl = imageBaseUrl + separator + string.Join("&", parameters);
 
-            TagBuilder tagBuilder = new TagBuilder("img");
+            var tagBuilder = new TagBuilder("img");
             tagBuilder.Attributes.Add("src", imageUrl);
             return new MvcHtmlString(tagBuilder.ToString());
         }
 
-        private static string CalculateCrop(FocalImageData image, int width, int height)
+        private static string CalculateCrop(IFocalImageData image, int width, int height)
         {
             if (image == null)
                 return $"({0},{0},{width},{height})";
@@ -142,128 +140,7 @@ namespace Forte.SmartFocalPoint
             return UrlResolver.Current.GetUrl(image);
         }
 
-        [Obsolete("This extension is deprecated, use FocusedImage instead")]
-        public static MvcHtmlString ResizedPicture(
-            this HtmlHelper helper,
-            ContentReference image,
-            int? width,
-            int? height,
-            bool smartCrop)
-        {
-            if (ContentReference.IsNullOrEmpty(image))
-            {
-                return MvcHtmlString.Empty;
-            }
-            string imageBaseUrl = ResolveImageUrl(image);
-            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out FocalImageData imageFile);
-
-            var isCrop = width != null && height != null;
-
-            var parameters = new List<string>();
-
-            if (smartCrop && isCrop)
-            {
-                parameters.Add("crop=" + CalculateCropBounds(imageFile, width.Value, height.Value));
-            }
-            if (width != null)
-            {
-                parameters.Add("width=" + width.ToString());
-            }
-
-            if (height != null)
-            {
-                parameters.Add("height=" + height.ToString());
-            }
-
-
-
-            if (isCrop)
-            {
-                parameters.Add("mode=crop");
-            }
-
-
-            var separator = imageBaseUrl.Contains("?") ? "&" : "?";
-
-            var imageUrl = imageBaseUrl + separator + string.Join("&", parameters);
-
-
-            TagBuilder tagBuilder = new TagBuilder("img");
-            tagBuilder.Attributes.Add("src", imageUrl);
-
-            return new MvcHtmlString(tagBuilder.ToString());
-
-        }
-
-        private static string CalculateCropBounds(FocalImageData imageFile, int width, int height)
-        {
-            using (var stream = ReadBlob(imageFile))
-            {
-                var originalImage = Image.FromStream(stream);
-
-                double cropRatio = width / (double)height;
-                double originalRatio = originalImage.Width / (double)originalImage.Height;
-
-                if (imageFile.FocalPoint == null)
-                {
-                    return $"0,0,{originalImage.Width},{originalImage.Height}";
-                }
-
-                var cropQuery = string.Empty;
-                var cropX = 0.0;
-                var cropY = 0.0;
-                if (cropRatio < originalRatio)
-                {
-                    var boundingRectHeight = originalImage.Height;
-                    var boundingRectWidth = boundingRectHeight * cropRatio;
-                    var middlePointX = imageFile.FocalPoint.X * originalImage.Width / 100;
-
-                    cropX = middlePointX - boundingRectWidth / 2;
-                    if (cropX < 0)
-                        cropX = 0;
-
-                    if (cropX + boundingRectWidth > originalImage.Width)
-                        cropX = originalImage.Width - boundingRectWidth;
-
-                    cropQuery = $"{cropX},{cropY},{cropX + boundingRectWidth},{cropY + boundingRectHeight}";
-                }
-                else
-                {
-                    var boundingRectWidth = originalImage.Width;
-                    var boundingRectHeight = boundingRectWidth / cropRatio;
-                    var middlePointY = imageFile.FocalPoint.Y * originalImage.Height / 100;
-
-                    cropY = middlePointY - boundingRectHeight / 2;
-                    if (cropY < 0)
-                        cropY = 0;
-
-                    if (cropY + boundingRectHeight > originalImage.Height)
-                        cropY = originalImage.Height - boundingRectHeight;
-
-                    cropQuery = $"{cropX},{cropY},{cropX + boundingRectWidth},{cropY + boundingRectHeight}";
-                }
-
-                //cropQuery += cropX < width ? $"&width={width + cropX}" : $"&width={width}";
-                //cropQuery += cropY < height ? $"&height={height + cropY}" : $"&height={height}";
-
-                return cropQuery;
-            }
-        }
-
-        private static MemoryStream ReadBlob(FocalImageData content)
-        {
-	        using (var stream = content.BinaryData.OpenRead())
-	        {
-		        var buffer = new byte[stream.Length];
-		        stream.Read(buffer, 0, buffer.Length);
-
-		        var memoryStream = new MemoryStream(buffer, writable: false);
-		        return memoryStream;
-	        }
-        }
-
-        
-	}
+    }
 
     public class SmartFocalPointCalculator
     {

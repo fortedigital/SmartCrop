@@ -8,7 +8,7 @@ namespace Forte.SmartFocalPoint.Business
         Url = "/custom-plugins/smartfocalpoint-plugin")]
     public class SmartFocalPointAdminPluginController : Controller
     {
-        private SmartFocalPointAdminPluginSettings _settings;
+        private readonly SmartFocalPointAdminPluginSettings _settings;
 
         public SmartFocalPointAdminPluginController()
         {

@@ -13,28 +13,23 @@
 @Html.PropertyFor(m => m.CurrentPage.Image)
 
 <h1>300x300</h1>
-@Html.ResizedPicture(Model.CurrentPage.Image, 300, 300, false)<br /><br />
-@Html.ResizedPicture(Model.CurrentPage.Image, 300, 300, true)<br /><br />
+@Html.FocusedImage(Model.CurrentPage.Image, 300, 300)<br /><br />
 <img src="@Html.ResizeImage(Model.CurrentPage.Image, 300, 300).FitMode(FitMode.Crop)" /> <br /><br />
 
 <h1>300x600</h1>
-@Html.ResizedPicture(Model.CurrentPage.Image, 300, 600, false)<br /><br />
-@Html.ResizedPicture(Model.CurrentPage.Image, 300, 600, true)<br /><br />
+@Html.FocusedImage(Model.CurrentPage.Image, 300, 600)<br /><br />
 <img src="@Html.ResizeImage(Model.CurrentPage.Image, 300, 600).FitMode(FitMode.Crop)" /> <br /><br />
 
 <h1>600x300</h1>
-@Html.ResizedPicture(Model.CurrentPage.Image, 600, 300, false)<br /><br />
-@Html.ResizedPicture(Model.CurrentPage.Image, 600, 300, true)<br /><br />
+@Html.FocusedImage(Model.CurrentPage.Image, 600, 300)<br /><br />
 <img src="@Html.ResizeImage(Model.CurrentPage.Image, 600, 300).FitMode(FitMode.Crop)" /> <br /><br />
 
 <h1>600x200</h1>
-@Html.ResizedPicture(Model.CurrentPage.Image, 600, 200, false)<br /><br />
-@Html.ResizedPicture(Model.CurrentPage.Image, 600, 200, true)<br /><br />
+@Html.FocusedImage(Model.CurrentPage.Image, 600, 200)<br /><br />
 <img src="@Html.ResizeImage(Model.CurrentPage.Image, 600, 200).FitMode(FitMode.Crop)" /> <br /><br />
 
 <h1>200x600</h1>
-@Html.ResizedPicture(Model.CurrentPage.Image, 200, 600, false)<br /><br />
-@Html.ResizedPicture(Model.CurrentPage.Image, 200, 600, true)<br /><br />
+@Html.FocusedImage(Model.CurrentPage.Image, 200, 600)<br /><br />
 <img src="@Html.ResizeImage(Model.CurrentPage.Image, 200, 600).FitMode(FitMode.Crop)" /> <br /><br />
 
 

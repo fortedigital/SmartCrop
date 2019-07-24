@@ -50,7 +50,8 @@ Parameters:
 - image - ContentReference to ImageFile property
 - width - Desired width of cropped image
 - height - Desired height of cropped image
-- forceSize - Always make output thumbnail to be in desired size. This flag  takes action only if original width/height is smaller than desired size
+- objectFitMode - Possible values: fill, contain, crop (default). Fill will fill cropped image to specified width/height rect if result crop would be smaller 
+adding pad if necessary. Contain will contain original image within specified bounds without cropping. Crop will only crop image. 
 - noZoomout - Normally ImageResizer zooms out huge images to preserve as much content as possible. Use this flag to stop this behaviour
 
 Example:

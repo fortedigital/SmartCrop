@@ -55,39 +55,41 @@ namespace Forte.SmartFocalPoint
                 .Select(_contentRepository.Get<ImageData>);
             var images = imagesEnumerable as ImageData[] ?? imagesEnumerable.ToArray();
 
-            var skippedImages = new List<string>();
+            var failedImagesStatuses = new List<string>();
             var imagesCount = images.Length;
             var updatedCount = 0;
-
+            var skippedCount = 0;
 
             foreach (var image in images)
             {
                 var returnedStatus = UpdateProperties(image);
                 updatedCount++;
+                if (returnedStatus == " ")
+                    skippedCount++;
 
-                if (!returnedStatus.IsEmpty())
+                if (!string.IsNullOrWhiteSpace(returnedStatus))
                 {
-                    skippedImages.Add(returnedStatus);
+                    failedImagesStatuses.Add(returnedStatus);
                 }
 
                 //For long running jobs periodically check if stop is signaled and if so stop execution
                 if (_stopSignaled)
                 {
-                    return "Stop of job was called.\r\n" + GetStatusMessage(updatedCount, imagesCount, skippedImages);
+                    return "Stop of job was called.\r\n" + GetStatusMessage(imagesCount, updatedCount, skippedCount, failedImagesStatuses);
                 }
                 
             }
-            return "Image files' properties updated.\r\n" + GetStatusMessage(updatedCount, imagesCount, skippedImages);
+            return "Image files' properties updated.\r\n" + GetStatusMessage(imagesCount, updatedCount, skippedCount, failedImagesStatuses);
         }
 
         private string UpdateProperties(ImageData image)
         {
             
-            if(!(image is FocalImageData focalImage))
-                return $"{image.Name} is not of type {nameof(FocalImageData)}";
+            if(!(image is IFocalImageData focalImage))
+                return $"{image.Name} is not of type {nameof(IFocalImageData)}";
 
             if (focalImage.FocalPoint != null)
-                return string.Empty;
+                return " ";
 
             //republish image
             var file = _contentRepository.Get<ImageData>(image.ContentLink).CreateWritableClone() as ImageData;
@@ -104,10 +106,10 @@ namespace Forte.SmartFocalPoint
             return string.Empty;
         }
 
-        private static string GetStatusMessage(int updatedImagesCount, int allImagesCount, List<string> returnStatuses)
+        private static string GetStatusMessage(int allImagesCount, int updatedImagesCount, int skippedImagesCount, List<string> returnStatuses)
         {
-            var message = $"Updated images: {updatedImagesCount} out of {allImagesCount}, " +
-                          $"including {returnStatuses.Count} skipped files.\r\n";
+            var message = $"Processed images: {updatedImagesCount} out of {allImagesCount}, " +
+                          $"{skippedImagesCount} skipped, {returnStatuses.Count} failed.\r\n";
             foreach (var statMsg in returnStatuses)
             {
                 message = message + statMsg + "\r\n";

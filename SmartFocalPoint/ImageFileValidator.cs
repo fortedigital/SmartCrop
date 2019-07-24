@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Forte.SmartFocalPoint
 {
-    public class ImageFileValidator : IValidate<FocalImageData>
+    public class ImageFileValidator : IValidate<IFocalImageData>
     {
         public string ErrorMessage { get; set; }
 
@@ -17,7 +17,7 @@ namespace Forte.SmartFocalPoint
                            "check your API key and server availability to Cognitive Services.";
         }
 
-        public IEnumerable<ValidationError> Validate(FocalImageData image)
+        public IEnumerable<ValidationError> Validate(IFocalImageData image)
         {
             if (image.SmartFocalPointEnabled
                 && image.FocalPoint == null)
@@ -27,7 +27,7 @@ namespace Forte.SmartFocalPoint
                     new ValidationError()
                     {
                         ErrorMessage = ErrorMessage,
-                        PropertyName = image.GetPropertyName<FocalImageData>(p => p.Name),
+                        PropertyName = image.GetPropertyName<IFocalImageData>(p => p.Name),
                         Severity = ValidationErrorSeverity.Warning,
                         ValidationType = ValidationErrorType.Unspecified
                     }
