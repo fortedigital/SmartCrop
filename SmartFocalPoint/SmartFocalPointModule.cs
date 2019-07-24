@@ -149,12 +149,7 @@ namespace Forte.SmartFocalPoint
 
         }
 
-		public void Uninitialize(InitializationEngine context)
-        {
-            context.Locate.ContentEvents().PublishingContent -= HandlePublishingContent;
-        }
-
-        private static bool IsLastVersionFocalPointNull(IFocalPointData image)
+        public virtual bool IsLastVersionFocalPointNull(IFocalPointData image)
         {
             var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
@@ -171,6 +166,11 @@ namespace Forte.SmartFocalPoint
 
             var lastImage = contentRepository.Get<IFocalImageData>(lastVersion.ContentLink);
             return lastImage.FocalPoint == null;
+        }
+
+        public void Uninitialize(InitializationEngine context)
+        {
+            context.Locate.ContentEvents().PublishingContent -= HandlePublishingContent;
         }
 
     }

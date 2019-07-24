@@ -1,4 +1,5 @@
-﻿using EPiServer;
+﻿using System;
+using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
@@ -64,9 +65,13 @@ namespace SmartFocalPointTests
         public void FocusedImageTestWithNullImageWidthAndHeight()
         {
             _imageMock.Setup(x => x.SmartFocalPointEnabled).Returns(false);
+            _imageMock.Setup(x => x.OriginalWidth).Returns((int?) null);
 
             var expected = MvcHtmlString.Empty;
             var actual = _helper.FocusedImage(_contentRef);
+
+            //reset property for remaining tests
+            _imageMock.Setup(x => x.OriginalWidth).Returns(OriginalWidth);
 
             Assert.AreEqual(expected, actual);
         }

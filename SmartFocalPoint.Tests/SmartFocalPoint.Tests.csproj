@@ -93,6 +93,7 @@
     <Compile Include="FocusedImageHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CalculateCropTests.cs" />
+    <Compile Include="SmartFocalPointModuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
