@@ -10,6 +10,7 @@ using EPiServer.Web;
 using EPiServer.Web.Routing;
 using Forte.SmartFocalPoint;
 using Forte.SmartFocalPoint.Models.Media;
+using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -25,6 +26,9 @@ namespace SmartFocalPointTests
         private static ContentReference _contentRef;
         private static Mock<IFocalImageData> _imageMock;
         private const string FakeUrl = "test_url";
+        //warning: changing these will impact few expected outputs
+        private const int OriginalWidth = 800;
+        private const int OriginalHeight = 600;
 
         [ClassInitialize]
         public static void ClassInitializer(TestContext testContext)
@@ -34,6 +38,9 @@ namespace SmartFocalPointTests
             _helper = new HtmlHelper(viewContextMock.Object, viewDataContainerMock.Object);
             _contentRef = new ContentReference(1);
             _imageMock = new Mock<IFocalImageData>();
+            _imageMock.Setup(x => x.OriginalWidth).Returns(OriginalWidth);
+            _imageMock.Setup(x => x.OriginalHeight).Returns(OriginalHeight);
+            _imageMock.Setup(x => x.FocalPoint).Returns(new FocalPoint {X = 50.0, Y = 50.0});
 
             var repository = new Mock<IContentRepository>();
             repository.Setup(x => x.Get<IFocalImageData>(It.IsAny<ContentReference>())).Returns(_imageMock.Object);
@@ -71,14 +78,12 @@ namespace SmartFocalPointTests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod]
+        [DataTestMethod]
         [FocusedImageHelperData]
-        public void FocusedImageTestWithParameters(bool smartEnabled, int? originalW, int? originalH, 
+        public void FocusedImageTestWithParameters(bool smartEnabled, 
             int? width, int? height, string mode, bool zoom, string expectedParams)
         {
             _imageMock.Setup(x => x.SmartFocalPointEnabled).Returns(smartEnabled);
-            _imageMock.Setup(x => x.OriginalWidth).Returns(originalW);
-            _imageMock.Setup(x => x.OriginalHeight).Returns(originalH);
 
             var expected = "<img src=\"" + FakeUrl + "?" + expectedParams + "\"></img>";
             var actual = _helper.FocusedImage(_contentRef, width, height, mode, zoom).ToString();
