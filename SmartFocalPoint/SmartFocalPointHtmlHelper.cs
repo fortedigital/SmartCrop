@@ -26,9 +26,9 @@ namespace Forte.SmartFocalPoint
             }
 
             var imageBaseUrl = ResolveImageUrl(image);
-            ServiceLocator.Current.GetInstance<IContentLoader>().TryGet(image, out IFocalImageData imageFile);
+            var imageFile = ServiceLocator.Current.GetInstance<IContentLoader>().Get<IFocalImageData>(image);
 
-            if (imageFile.OriginalWidth == null || imageFile.OriginalHeight == null)
+            if (imageFile?.OriginalWidth == null || imageFile.OriginalHeight == null)
             {
                 return MvcHtmlString.Empty;
             }
