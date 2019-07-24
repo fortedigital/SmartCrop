@@ -1,24 +1,17 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Core;
-using EPiServer.MirroringService.Common;
 using EPiServer.ServiceLocation;
-using EPiServer.Web;
 using EPiServer.Web.Routing;
 using Forte.SmartFocalPoint;
 using Forte.SmartFocalPoint.Models.Media;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Web.Mvc;
 
 namespace SmartFocalPointTests
 {
-    /// <summary>
-    /// Summary description for FocusedImageHelperTests
-    /// </summary>
+    
     [TestClass]
     public class FocusedImageHelperTests
     {
