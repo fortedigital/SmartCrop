@@ -86,9 +86,9 @@ namespace Forte.SmartFocalPoint
             return new MvcHtmlString(tagBuilder.ToString());
         }
 
-        private static string CalculateCrop(IFocalImageData image, int width, int height)
+        public static string CalculateCrop(IFocalImageData image, int width, int height)
         {
-            if (image == null)
+            if (image?.OriginalWidth == null || image.OriginalHeight == null)
                 return $"({0},{0},{width},{height})";
 
             var x = image.FocalPoint?.X ?? 50.0;
@@ -140,47 +140,6 @@ namespace Forte.SmartFocalPoint
             return UrlResolver.Current.GetUrl(image);
         }
 
-    }
-
-    public class SmartFocalPointCalculator
-    {
-        public static string CalculateCrop(double X, double Y, int? originalWidth, int? originalHeight, int width, int height)
-        {
-            var middleX = X * originalWidth / 100;
-            var middleY = Y * originalHeight / 100;
-
-            var X1 = middleX - width / 2;
-            var X2 = middleX + width / 2;
-            var Y1 = middleY - height / 2;
-            var Y2 = middleY + height / 2;
-
-            if (X1 < 0.0)
-            {
-                var offset = 0.0 - X1;
-                X1 = 0.0;
-                X2 += offset;
-            }
-            if (X2 > originalWidth)
-            {
-                var offset = X2 - originalWidth;
-                X1 -= offset;
-                X2 = originalWidth;
-            }
-            if (Y1 < 0.0)
-            {
-                var offset = 0.0 - Y1;
-                Y1 = 0.0;
-                Y2 += offset;
-            }
-            if (Y2 > originalHeight)
-            {
-                var offset = Y2 - originalHeight;
-                Y1 -= offset;
-                Y2 = originalHeight;
-            }
-
-            return $"({X1},{Y1},{X2},{Y2})";
-        }
     }
 
 }
