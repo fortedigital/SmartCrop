@@ -22,6 +22,9 @@ namespace SmartFocalPointTests
     public class FocusedImageHelperTests
     {
         private static HtmlHelper _helper;
+        private static ContentReference _contentRef;
+        private static Mock<IFocalImageData> _imageMock;
+        private const string FakeUrl = "test_url";
 
         [ClassInitialize]
         public static void ClassInitializer(TestContext testContext)
@@ -29,6 +32,23 @@ namespace SmartFocalPointTests
             var viewContextMock = new Mock<ViewContext>();
             var viewDataContainerMock = new Mock<IViewDataContainer>();
             _helper = new HtmlHelper(viewContextMock.Object, viewDataContainerMock.Object);
+            _contentRef = new ContentReference(1);
+            _imageMock = new Mock<IFocalImageData>();
+
+            var repository = new Mock<IContentRepository>();
+            repository.Setup(x => x.Get<IFocalImageData>(It.IsAny<ContentReference>())).Returns(_imageMock.Object);
+
+            var resolver = new Mock<UrlResolver>();
+            resolver.Setup(x => x.GetUrl(_contentRef)).Returns(FakeUrl);
+
+            var loader = new Mock<IContentLoader>();
+            loader.Setup(x => x.Get<IFocalImageData>(_contentRef)).Returns(_imageMock.Object);
+
+            var locator = new Mock<IServiceLocator>();
+            locator.Setup(x => x.GetInstance<UrlResolver>()).Returns(resolver.Object);
+            locator.Setup(x => x.GetInstance<IContentRepository>()).Returns(repository.Object);
+            locator.Setup(x => x.GetInstance<IContentLoader>()).Returns(loader.Object);
+            ServiceLocator.SetLocator(locator.Object);
         }
 
         [TestMethod]
@@ -39,29 +59,31 @@ namespace SmartFocalPointTests
 
             Assert.AreEqual(expected, actual);
         }
+        
+        [TestMethod]
+        public void FocusedImageTestWithNullImageWidthAndHeight()
+        {
+            _imageMock.Setup(x => x.SmartFocalPointEnabled).Returns(false);
+
+            var expected = MvcHtmlString.Empty;
+            var actual = _helper.FocusedImage(_contentRef);
+
+            Assert.AreEqual(expected, actual);
+        }
 
         [TestMethod]
-        public void FocusedImageTest()
+        [FocusedImageHelperData]
+        public void FocusedImageTestWithParameters(bool smartEnabled, int? originalW, int? originalH, 
+            int? width, int? height, string mode, bool zoom, string expectedParams)
         {
-            var cref = new ContentReference(1);
-            var imageMock = new Mock<IFocalImageData>();
-            var repo = new Mock<IContentRepository>();
-            repo.Setup(x => x.Get<IFocalImageData>(It.IsAny<ContentReference>())).Returns(imageMock.Object);
-            var resolver = new Mock<UrlResolver>();
-            resolver.Setup(x => x.GetUrl(cref)).Returns("fake");
-            var loader = new Mock<IContentLoader>();
-            loader.Setup(x => x.Get<IFocalImageData>(cref)).Returns(imageMock.Object);
-            
+            _imageMock.Setup(x => x.SmartFocalPointEnabled).Returns(smartEnabled);
+            _imageMock.Setup(x => x.OriginalWidth).Returns(originalW);
+            _imageMock.Setup(x => x.OriginalHeight).Returns(originalH);
 
-            var locator = new Mock<IServiceLocator>();
-            locator.Setup(x => x.GetInstance<UrlResolver>()).Returns(resolver.Object);
-            locator.Setup(x => x.GetInstance<IContentRepository>()).Returns(repo.Object);
-            locator.Setup(x => x.GetInstance<IContentLoader>()).Returns(loader.Object);
-            ServiceLocator.SetLocator(locator.Object);
+            var expected = "<img src=\"" + FakeUrl + "?" + expectedParams + "\"></img>";
+            var actual = _helper.FocusedImage(_contentRef, width, height, mode, zoom).ToString();
 
-            _helper.FocusedImage(cref);
-
-            Assert.IsTrue(true);
+            Assert.AreEqual(expected, actual);
         }
     }
 }
