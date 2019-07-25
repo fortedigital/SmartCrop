@@ -19,6 +19,7 @@
   </metadata>
   <files>
         <file src="bin/Forte.SmartFocalPoint.dll" target="lib\net462" />
+        <file src="bin/Release-Net461/Forte.SmartFocalPoint.dll" target="lib\net461" />
 		<file src="Plugins/Index.cshtml" target="content\modules\_protected\Forte.SmartFocalPoint"/>
   </files>
 </package>
