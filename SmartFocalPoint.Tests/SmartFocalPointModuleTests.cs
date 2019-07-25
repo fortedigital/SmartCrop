@@ -7,7 +7,6 @@ using Forte.SmartFocalPoint.Models.Media;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Moq.Protected;
 
 namespace SmartFocalPointTests
 {

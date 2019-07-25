@@ -1,5 +1,4 @@
-﻿using System;
-using EPiServer;
+﻿using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
@@ -12,9 +11,9 @@ using System.Web.Mvc;
 
 namespace SmartFocalPointTests
 {
-    
+
     [TestClass]
-    public class FocusedImageHelperTests
+    public class SmartFocalPointHelperTests
     {
         private static HtmlHelper _helper;
         private static ContentReference _contentRef;
@@ -77,7 +76,7 @@ namespace SmartFocalPointTests
         }
 
         [DataTestMethod]
-        [FocusedImageHelperData]
+        [SmartFocalPointHelperData]
         public void FocusedImageTestWithParameters(bool smartEnabled, 
             int? width, int? height, string mode, bool zoom, string expectedParams)
         {
