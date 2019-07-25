@@ -13,7 +13,7 @@ namespace Forte.SmartFocalPoint
     {
         private static readonly ILogger Logger = LogManager.GetLogger();
 
-        public BoundingRect GetAreaOfInterest(Image image)
+        public virtual BoundingRect GetAreaOfInterest(Image image)
         {
             using (var imageStream = new MemoryStream())
             {

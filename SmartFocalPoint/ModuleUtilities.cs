@@ -13,7 +13,7 @@ namespace Forte.SmartFocalPoint
     public class ModuleUtilities
     {
 
-        public MemoryStream GetBlobStream(IBinaryStorable content)
+        public virtual MemoryStream GetBlobStream(IBinaryStorable content)
         {
             using (var stream = content.BinaryData.OpenRead())
             {
@@ -25,12 +25,12 @@ namespace Forte.SmartFocalPoint
             }
         }
 
-        public bool IsLastVersionFocalPointNull(IFocalPointData image)
+        public virtual bool IsLastVersionFocalPointNull(IFocalPointData image)
         {
+            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return true;
+
             var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-
-            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return true;
 
             var lastVersion = contentVersionRepository
                 .List(image.ContentLink)
@@ -44,7 +44,7 @@ namespace Forte.SmartFocalPoint
             return lastImage.FocalPoint == null;
         }
 
-        public Image ResizeImage(Image originalImage, int maxSize)
+        public virtual Image ResizeImage(Image originalImage, int maxSize)
         {
             int w;
             int h;

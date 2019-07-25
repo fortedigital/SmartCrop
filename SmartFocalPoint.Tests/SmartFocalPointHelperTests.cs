@@ -22,9 +22,8 @@ namespace SmartFocalPointTests
         //warning: changing these will impact few expected outputs
         private const int OriginalWidth = 800;
         private const int OriginalHeight = 600;
-
-        [ClassInitialize]
-        public static void ClassInitializer(TestContext testContext)
+        
+        public SmartFocalPointHelperTests()
         {
             var viewContextMock = new Mock<ViewContext>();
             var viewDataContainerMock = new Mock<IViewDataContainer>();

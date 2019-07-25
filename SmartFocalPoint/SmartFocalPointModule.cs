@@ -15,16 +15,17 @@ namespace Forte.SmartFocalPoint
     public class SmartFocalPointModule : IInitializableModule
     {
 	    private const int MaxSize = 1024;
-        private SmartFocalPointAdminPluginSettings _settings;
-        private CognitiveServicesConnector _connector;
-        private ModuleUtilities _utilities;
 
-		public void Initialize(InitializationEngine context)
+        public virtual CognitiveServicesConnector ServicesConnector { get; set; }
+        public virtual ModuleUtilities Utilities { get; set; }
+        public virtual SmartFocalPointAdminPluginSettings ConnectionSettings { get; set; }
+
+        public void Initialize(InitializationEngine context)
         {
             context.Locate.ContentEvents().PublishingContent += HandlePublishingContent;
-            _settings = new SmartFocalPointAdminPluginSettings();
-            _connector = new CognitiveServicesConnector();
-            _utilities = new ModuleUtilities();
+            ConnectionSettings = new SmartFocalPointAdminPluginSettings();
+            ServicesConnector = new CognitiveServicesConnector();
+            Utilities = new ModuleUtilities();
         }
 
         private void HandlePublishingContent(object sender, ContentEventArgs e)
@@ -37,19 +38,19 @@ namespace Forte.SmartFocalPoint
                 return;
 
             //if FP is null and last version is not then editor set it so, leave it
-            if (!_utilities.IsLastVersionFocalPointNull(imageFile))
+            if (!Utilities.IsLastVersionFocalPointNull(imageFile))
                 return;
 
-            if (!_settings.IsConnectionEnabled())
+            if (!ConnectionSettings.IsConnectionEnabled())
                 return;
             
-            using (var stream = _utilities.GetBlobStream(imageFile))
+            using (var stream = Utilities.GetBlobStream(imageFile))
             {
                 var originalImage = Image.FromStream(stream);
 
-                var resizedImage = _utilities.ResizeImage(originalImage, MaxSize);
+                var resizedImage = Utilities.ResizeImage(originalImage, MaxSize);
 
-                var boundingRect = _connector.GetAreaOfInterest(resizedImage);
+                var boundingRect = ServicesConnector.GetAreaOfInterest(resizedImage);
 
                 if (boundingRect == null)
                     return;
