@@ -35,7 +35,7 @@ namespace Forte.SmartFocalPoint.Business
             return string.Equals("True", returnVal);
         }
 
-        public bool IsConnectionEnabled()
+        public virtual bool IsConnectionEnabled()
         {
             return LoadSettings();
         }

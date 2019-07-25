@@ -2,21 +2,11 @@
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Logging;
-using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 using Forte.SmartFocalPoint.Business;
 using Forte.SmartFocalPoint.Models.Media;
 using ImageResizer.Plugins.EPiFocalPoint.SpecializedProperties;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
-using System;
-using System.Configuration;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using ImageResizer.Plugins.EPiFocalPoint;
 
 namespace Forte.SmartFocalPoint
 {
@@ -25,12 +15,17 @@ namespace Forte.SmartFocalPoint
     public class SmartFocalPointModule : IInitializableModule
     {
 	    private const int MaxSize = 1024;
-        private static readonly ILogger Logger = LogManager.GetLogger();
-        private readonly SmartFocalPointAdminPluginSettings _settings = new SmartFocalPointAdminPluginSettings();
 
-		public void Initialize(InitializationEngine context)
+        public virtual CognitiveServicesConnector ServicesConnector { get; set; }
+        public virtual ModuleUtilities Utilities { get; set; }
+        public virtual SmartFocalPointAdminPluginSettings ConnectionSettings { get; set; }
+
+        public void Initialize(InitializationEngine context)
         {
             context.Locate.ContentEvents().PublishingContent += HandlePublishingContent;
+            ConnectionSettings = new SmartFocalPointAdminPluginSettings();
+            ServicesConnector = new CognitiveServicesConnector();
+            Utilities = new ModuleUtilities();
         }
 
         private void HandlePublishingContent(object sender, ContentEventArgs e)
@@ -43,19 +38,19 @@ namespace Forte.SmartFocalPoint
                 return;
 
             //if FP is null and last version is not then editor set it so, leave it
-            if (!IsLastVersionFocalPointNull(imageFile))
+            if (!Utilities.IsLastVersionFocalPointNull(imageFile))
                 return;
 
-            if (!_settings.IsConnectionEnabled())
+            if (!ConnectionSettings.IsConnectionEnabled())
                 return;
             
-            using (var stream = ReadBlob(imageFile))
+            using (var stream = Utilities.GetBlobStream(imageFile))
             {
                 var originalImage = Image.FromStream(stream);
 
-                var resizedImage = ResizeImage(originalImage, MaxSize);
+                var resizedImage = Utilities.ResizeImage(originalImage, MaxSize);
 
-                var boundingRect = GetAreaOfInterest(resizedImage);
+                var boundingRect = ServicesConnector.GetAreaOfInterest(resizedImage);
 
                 if (boundingRect == null)
                     return;
@@ -77,95 +72,6 @@ namespace Forte.SmartFocalPoint
                 };
             }
 
-        }
-
-        private static Image ResizeImage(Image originalImage, int maxSize)
-        {
-	        int w;
-	        int h;
-	        var desWidth = maxSize;
-	        var desHeight = maxSize;
-
-			if (originalImage.Height > originalImage.Width)
-	        {
-		        w = (originalImage.Width * desHeight) / originalImage.Height;
-		        h = desHeight;
-		    
-	        }
-	        else
-	        {
-		        w = desWidth;
-		        h = (originalImage.Height * desWidth) / originalImage.Width;
-		       
-	        }
-
-			return originalImage.GetThumbnailImage(w, h, null, IntPtr.Zero);
-        }
-
-		private static MemoryStream ReadBlob(IBinaryStorable content)
-        {
-            using (var stream = content.BinaryData.OpenRead())
-            {
-                var buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-
-                var memoryStream = new MemoryStream(buffer, writable: false);
-                return memoryStream;
-            }
-        }
-
-        private static BoundingRect GetAreaOfInterest(Image image)
-        {
-	        using (var imageStream = new MemoryStream())
-	        {
-				image.Save(imageStream, ImageFormat.Png);
-				imageStream.Seek(0L, SeekOrigin.Begin);
-
-                var key = ConfigurationManager.AppSettings["CognitiveServicesApiKey"];
-                var server = ConfigurationManager.AppSettings["CognitiveServicesServer"];
-
-				var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(key))
-		        {
-			        Endpoint = server
-		        };
-                try
-                {
-                    var result = client.GetAreaOfInterestInStreamWithHttpMessagesAsync(imageStream).Result;
-                    return result.Body.AreaOfInterest;
-                }
-                catch (AggregateException exceptions)
-                {
-                    exceptions.Handle(HandleException);
-                    return null;
-                }
-            }
-        }
-
-        private static bool HandleException(Exception ex)
-        {
-            if (!(ex is ComputerVisionErrorException exception)) return false;
-            Logger.Error(exception.Body.ToString());
-            return true;
-
-        }
-
-        public virtual bool IsLastVersionFocalPointNull(IFocalPointData image)
-        {
-            var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
-            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-
-            if (ContentReference.IsNullOrEmpty(image.ContentLink)) return true;
-
-            var lastVersion = contentVersionRepository
-                .List(image.ContentLink)
-                .Where(p => p.Status == VersionStatus.PreviouslyPublished)
-                .OrderByDescending(p => p.Saved)
-                .FirstOrDefault();
-
-            if (lastVersion == null) return true;
-
-            var lastImage = contentRepository.Get<IFocalImageData>(lastVersion.ContentLink);
-            return lastImage.FocalPoint == null;
         }
 
         public void Uninitialize(InitializationEngine context)

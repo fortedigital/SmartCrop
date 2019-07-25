@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace SmartFocalPointTests
 {
-    public class FocusedImageHelperDataAttribute : Attribute, ITestDataSource
+    public class SmartFocalPointHelperDataAttribute : Attribute, ITestDataSource
     {
 
         public IEnumerable<object[]> GetData(MethodInfo methodInfo)
