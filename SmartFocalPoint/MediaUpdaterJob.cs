@@ -1,4 +1,5 @@
-﻿using EPiServer;
+﻿using System;
+using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAccess;
 using EPiServer.Logging;
@@ -97,7 +98,7 @@ namespace Forte.SmartFocalPoint
             {
                 _contentRepository.Save(file, SaveAction.Publish | SaveAction.ForceCurrentVersion);
             }
-            catch (AccessDeniedException ex)
+            catch (Exception ex)
             {
                 _logger.Error(ex.Message);
                 return $"{image.Name}: {ex.Message}";
