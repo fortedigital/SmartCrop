@@ -7,10 +7,10 @@ namespace Forte.SmartFocalPoint.Business
 {
     public class SmartFocalPointAdminPluginSettings
     {
-        private readonly DataSet _customDataSet;
+        private static DataSet _customDataSet;
         private const string Key = "SmartFocalPoint";
         private static readonly ILogger Logger = LogManager.GetLogger();
-
+        
         public SmartFocalPointAdminPluginSettings()
         {
             _customDataSet = new DataSet();
@@ -35,12 +35,7 @@ namespace Forte.SmartFocalPoint.Business
             return returnVal;
         }
 
-        public virtual bool IsConnectionEnabled()
-        {
-            return LoadSettings();
-        }
-
-        public void SaveSettings(bool value)
+        public void SaveSettingsValue(bool value)
         {
             try
             {
@@ -53,6 +48,11 @@ namespace Forte.SmartFocalPoint.Business
             {
                 Logger.Error(ex.Message);
             }
+        }
+
+        public virtual bool IsConnectionEnabled()
+        {
+            return LoadSettings();
         }
 
     }
