@@ -7,45 +7,40 @@ namespace Forte.SmartFocalPoint.Business
 {
     public class SmartFocalPointAdminPluginSettings
     {
-        private readonly DataSet _customDataSet;
-        private const string Key = "SmartCrop";
+        private static DataSet _customDataSet;
+        private const string Key = "SmartFocalPoint";
         private static readonly ILogger Logger = LogManager.GetLogger();
-
+        
         public SmartFocalPointAdminPluginSettings()
         {
             _customDataSet = new DataSet();
             _customDataSet.Tables.Add(new DataTable());
-            _customDataSet.Tables[0].Columns.Add(new DataColumn(Key, typeof(string)));
+            _customDataSet.Tables[0].Columns.Add(new DataColumn(Key, typeof(bool)));
         }
 
         private bool LoadSettings()
         {
 
-            var returnVal = string.Empty;
+            var returnVal = false;
             try
             {
                 PlugInSettings.Populate(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
-                returnVal = _customDataSet.Tables[0].Rows[0][Key].ToString();
+                returnVal = (bool)_customDataSet.Tables[0].Rows[0][Key];
             }
             catch (Exception ex)
             {
                 Logger.Error(ex.Message);
             }
 
-            return string.Equals("True", returnVal);
+            return returnVal;
         }
 
-        public virtual bool IsConnectionEnabled()
-        {
-            return LoadSettings();
-        }
-
-        public void SaveSettings(bool value)
+        public void SaveSettingsValue(bool value)
         {
             try
             {
                 var newRow = _customDataSet.Tables[0].NewRow();
-                newRow[Key] = value.ToString();
+                newRow[Key] = value;
                 _customDataSet.Tables[0].Rows.Add(newRow);
                 PlugInSettings.Save(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
             }
@@ -53,6 +48,11 @@ namespace Forte.SmartFocalPoint.Business
             {
                 Logger.Error(ex.Message);
             }
+        }
+
+        public virtual bool IsConnectionEnabled()
+        {
+            return LoadSettings();
         }
 
     }

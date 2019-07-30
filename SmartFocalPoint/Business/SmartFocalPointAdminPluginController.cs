@@ -27,7 +27,7 @@ namespace Forte.SmartFocalPoint.Business
         [HttpPost]
         public ActionResult Action(SmartFocalPointAdminPluginViewModel model)
         {
-            _settings.SaveSettings(model.IsSmartFocalPointEnabled);
+            _settings.SaveSettingsValue(model.IsSmartFocalPointEnabled);
             return View("~/modules/_protected/Forte.SmartFocalPoint/Index.cshtml", model);
         }
 
