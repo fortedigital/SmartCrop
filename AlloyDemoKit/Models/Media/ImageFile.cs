@@ -8,7 +8,7 @@ using Forte.SmartFocalPoint.Models.Media;
 namespace AlloyDemoKit.Models.Media
 {
     [ContentType(GUID = "0A89E464-56D4-449F-AEA8-2BF774AB8730")]
-    [MediaDescriptor(ExtensionString = "jpg,jpeg,jpe,ico,gif,bmp,png")]
+    [MediaDescriptor(ExtensionString = "jpg,jpeg,gif,png")]
     public class ImageFile : FocalImageData
     {
         /// <summary>
