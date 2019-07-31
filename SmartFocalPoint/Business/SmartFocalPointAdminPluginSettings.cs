@@ -17,31 +17,35 @@ namespace Forte.SmartFocalPoint.Business
             _customDataSet = new DataSet();
             _customDataSet.Tables.Add(new DataTable());
             _customDataSet.Tables[0].Columns.Add(new DataColumn(ConnectionEnabledKey, typeof(bool)));
+            _customDataSet.Tables[0].Columns.Add(new DataColumn(MediaFolderKey, typeof(Guid)));
         }
 
-        private bool LoadSettings()
+        private object[] LoadSettings()
         {
 
-            var returnVal = false;
+            var returnBool = false;
+            var returnGuid = Guid.Empty;
             try
             {
                 PlugInSettings.Populate(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
-                returnVal = (bool)_customDataSet.Tables[0].Rows[0][ConnectionEnabledKey];
+                returnBool = (bool)_customDataSet.Tables[0].Rows[0][ConnectionEnabledKey];
+                returnGuid = (Guid)_customDataSet.Tables[0].Rows[0][MediaFolderKey];
             }
             catch (Exception ex)
             {
                 Logger.Error(ex.Message);
             }
 
-            return returnVal;
+            return new object[] {returnBool, returnGuid};
         }
 
-        public void SaveSettingsValue(bool value)
+        public void SaveSettingsValue(bool enabledFlag, Guid chosenFolder)
         {
             try
             {
                 var newRow = _customDataSet.Tables[0].NewRow();
-                newRow[ConnectionEnabledKey] = value;
+                newRow[ConnectionEnabledKey] = enabledFlag;
+                newRow[MediaFolderKey] = chosenFolder;
                 _customDataSet.Tables[0].Rows.Add(newRow);
                 PlugInSettings.Save(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
             }
@@ -53,7 +57,12 @@ namespace Forte.SmartFocalPoint.Business
 
         public virtual bool IsConnectionEnabled()
         {
-            return LoadSettings();
+            return (bool) LoadSettings()[0];
+        }
+
+        public virtual Guid GetChosenMediaFolder()
+        {
+            return (Guid) LoadSettings()[1];
         }
 
     }

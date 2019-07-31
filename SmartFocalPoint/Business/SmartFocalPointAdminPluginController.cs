@@ -1,4 +1,5 @@
-﻿using EPiServer.PlugIn;
+﻿using System;
+using EPiServer.PlugIn;
 using Forte.SmartFocalPoint.Models.ViewModels;
 using System.Web.Mvc;
 using EPiServer;
@@ -28,7 +29,10 @@ namespace Forte.SmartFocalPoint.Business
         public ActionResult Index()
         {
 
-            var model = new SmartFocalPointAdminPluginViewModel {IsSmartFocalPointEnabled = GetSmartFocalPointSetting(), MediaFolder = _mediaFolder};
+            var model = new SmartFocalPointAdminPluginViewModel {IsSmartFocalPointEnabled = GetSmartFocalPointSetting(),
+                                                                    MediaFolder = _mediaFolder,
+                                                                    ChosenFolderGuid = GetChosenFolderSetting()
+            };
 
             return View("~/modules/_protected/Forte.SmartFocalPoint/Index.cshtml", model);
         }
@@ -36,19 +40,24 @@ namespace Forte.SmartFocalPoint.Business
         [HttpPost]
         public ActionResult ButtonAction(SmartFocalPointAdminPluginViewModel model)
         {
-            _settings.SaveSettingsValue(model.IsSmartFocalPointEnabled);
+            _settings.SaveSettingsValue(model.IsSmartFocalPointEnabled, model.ChosenFolderGuid);
             return View("~/modules/_protected/Forte.SmartFocalPoint/Index.cshtml", model);
         }
 
-        public bool GetSmartFocalPointSetting()
+        private bool GetSmartFocalPointSetting()
         {
             return _settings.IsConnectionEnabled();
+        }
+
+        private Guid GetChosenFolderSetting()
+        {
+            return _settings.GetChosenMediaFolder();
         }
 
         private MediaFolder LoadMediaFolderStructure()
         {
             var root = SiteDefinition.Current.GlobalAssetsRoot;
-            var mediaFolder = new MediaFolder(root);
+            var mediaFolder = new MediaFolder(root, Guid.Empty);
 
             MakeFolderStructure(mediaFolder);
 
@@ -59,7 +68,7 @@ namespace Forte.SmartFocalPoint.Business
         {
             foreach (var folder in _contentLoader.GetChildren<ContentFolder>(parentFolder.FolderReference))
             {
-                parentFolder.AddChildFolder(folder.ContentLink);
+                parentFolder.AddChildFolder(folder.ContentLink, folder.ContentGuid, folder.Name);
             }
 
             foreach (var childrenFolder in parentFolder.ChildrenFolders)
