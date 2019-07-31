@@ -4,5 +4,6 @@
     {
         public bool IsSmartFocalPointEnabled { get; set; }
 
+        public MediaFolder MediaFolder { get; set; }
     }
 }

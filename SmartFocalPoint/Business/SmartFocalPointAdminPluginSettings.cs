@@ -8,14 +8,15 @@ namespace Forte.SmartFocalPoint.Business
     public class SmartFocalPointAdminPluginSettings
     {
         private static DataSet _customDataSet;
-        private const string Key = "SmartFocalPoint";
+        private const string ConnectionEnabledKey = "IsConnectionEnabled";
+        private const string MediaFolderKey = "SearchedMediaFolder";
         private static readonly ILogger Logger = LogManager.GetLogger();
         
         public SmartFocalPointAdminPluginSettings()
         {
             _customDataSet = new DataSet();
             _customDataSet.Tables.Add(new DataTable());
-            _customDataSet.Tables[0].Columns.Add(new DataColumn(Key, typeof(bool)));
+            _customDataSet.Tables[0].Columns.Add(new DataColumn(ConnectionEnabledKey, typeof(bool)));
         }
 
         private bool LoadSettings()
@@ -25,7 +26,7 @@ namespace Forte.SmartFocalPoint.Business
             try
             {
                 PlugInSettings.Populate(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
-                returnVal = (bool)_customDataSet.Tables[0].Rows[0][Key];
+                returnVal = (bool)_customDataSet.Tables[0].Rows[0][ConnectionEnabledKey];
             }
             catch (Exception ex)
             {
@@ -40,7 +41,7 @@ namespace Forte.SmartFocalPoint.Business
             try
             {
                 var newRow = _customDataSet.Tables[0].NewRow();
-                newRow[Key] = value;
+                newRow[ConnectionEnabledKey] = value;
                 _customDataSet.Tables[0].Rows.Add(newRow);
                 PlugInSettings.Save(typeof(SmartFocalPointAdminPluginSettings), _customDataSet);
             }
